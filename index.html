@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>De Boa Com o Óleo</title>
-    <!-- PASSO FINAL: Substitua o placeholder abaixo pelo link da imagem do seu logo para o ícone da aba -->
+    <!-- PASSO FINAL: Para usar seu logo na aba, substitua o link abaixo pelo nome do seu arquivo de imagem (ex: 'Logo_deboaoleo.png') -->
     <link rel="icon" href="Logo_deboaoleo.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -29,29 +29,27 @@
                 height: 400px;
             }
         }
+        .impact-card {
+            background-color: #f0f9ff;
+            border-left: 5px solid #00A0B0;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .impact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
 
-    <!-- Palette Name: Energetic & Playful -->
-    <!-- Plan Narrative: Header with main KPI -> Monthly Summary Cards -> Weekly Growth Line Chart -> Geographic Analysis with two Bar Charts (Districts, Top Neighborhoods) -> Highlights/Incidents Cards -> Footer. -->
-    <!-- Visualization Choices:
-        - Total Collected: Goal(Inform) -> Big Number -> Justification(Key Metric) -> HTML/CSS (No SVG).
-        - Weekly Growth: Goal(Change) -> Line Chart -> Justification(Show Trend) -> Chart.js/Canvas (No SVG).
-        - Collection by District: Goal(Compare) -> Horizontal Bar Chart -> Justification(Clear Comparison) -> Chart.js/Canvas (No SVG).
-        - Top Neighborhoods: Goal(Organize/Rank) -> Vertical Bar Chart -> Justification(Avoid Clutter) -> Chart.js/Canvas (No SVG).
-        - Highlights/Incidents: Goal(Inform) -> Styled Cards -> Justification(Qualitative Context) -> HTML/CSS (No SVG).
-    -->
-    <!-- Confirmation: Neither Mermaid JS nor SVG were used in this output. All visualizations are rendered via Chart.js on Canvas or using styled HTML elements. -->
-
     <main class="container mx-auto p-4 sm:p-6 lg:p-8">
 
         <div class="flex justify-between items-center mb-8">
-             <img src="Logosanemar.png" alt="Logo Sanemar" class="h-10">
+             <img src="Logosanemar.png" alt="Logo Sanemar" class="h-10" onerror="this.onerror=null;this.src='https://placehold.co/200x50/FFFFFF/6A4A3C?text=Logo+Sanemar';">
         </div>
 
         <header class="text-center mb-10 flex flex-col md:flex-row items-center justify-center gap-6">
-            <img src="Logo_deboaoleo.png" alt="Logo De Boa com o Óleo" class="h-30 w-36 md:h-36 md:w-36">
+            <img src="Logo_deboaoleo.png" alt="Logo De Boa com o Óleo" class="h-28 w-28 md:h-36 md:w-36" onerror="this.onerror=null;this.src='https://placehold.co/150x150/FFFFFF/00A0B0?text=Logo+do+Programa';">
             <div>
                 <h1 class="text-4xl md:text-5xl font-extrabold text-[#00A0B0]">Programa De Boa com o Óleo</h1>
                 <p class="text-xl md:text-2xl text-gray-600 mt-2">Relatório de Resultados de Setembro de 2025</p>
@@ -78,10 +76,40 @@
             </div>
         </section>
 
+        <section id="impact" class="mb-12">
+            <h2 class="text-3xl font-bold text-center mb-6">Nosso Impacto Ambiental em Setembro</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="impact-card rounded-lg p-6 flex items-center">
+                    <div class="text-5xl mr-5">💧</div>
+                    <div>
+                        <p class="text-4xl font-bold text-[#007b8a]">24.7 Milhões</p>
+                        <h3 class="text-lg font-semibold text-gray-600">de Litros de Água Protegidos</h3>
+                        <p class="text-gray-500 mt-1 text-sm">Cada litro de óleo reciclado evita a contaminação de até 25 mil litros de água.</p>
+                    </div>
+                </div>
+                <div class="impact-card rounded-lg p-6 flex items-center">
+                     <div class="text-5xl mr-5">💨</div>
+                    <div>
+                        <p class="text-4xl font-bold text-[#007b8a]">2.4 Toneladas</p>
+                        <h3 class="text-lg font-semibold text-gray-600">de CO² a Menos na Atmosfera</h3>
+                         <p class="text-gray-500 mt-1 text-sm">A transformação do óleo em biodiesel emite significativamente menos gases de efeito estufa.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section id="trends" class="mb-12">
             <div class="bg-white rounded-xl shadow-lg p-6">
-                <h2 class="text-2xl font-bold text-center mb-1">Crescimento da Coleta Semanal</h2>
-                <p class="text-center text-gray-600 mb-6">O volume de óleo arrecadado demonstrou um crescimento expressivo e consistente ao longo das semanas de setembro, indicando o sucesso e a expansão contínua do programa.</p>
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
+                    <div class="text-center md:text-left">
+                        <h2 class="text-2xl font-bold mb-1">Crescimento da Coleta Semanal</h2>
+                        <p class="text-gray-600">O volume arrecadado cresceu de forma expressiva ao longo do mês.</p>
+                    </div>
+                    <div class="bg-green-100 text-green-800 p-3 rounded-lg mt-4 md:mt-0 text-center">
+                        <div class="text-2xl font-bold">▲ 18%</div>
+                        <div class="text-sm font-semibold">Em relação a Agosto</div>
+                    </div>
+                </div>
                 <div class="chart-container">
                     <canvas id="weeklyGrowthChart"></canvas>
                 </div>
@@ -92,44 +120,106 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div class="bg-white rounded-xl shadow-lg p-6">
                     <h2 class="text-2xl font-bold text-center mb-1">Coleta por Distrito</h2>
-                    <p class="text-center text-gray-600 mb-6">A análise por distritos revela que o 1º Distrito (Centro) continua sendo o principal polo de arrecadação, concentrando a maior parte das doações do mês.</p>
+                    <p class="text-center text-gray-600 mb-6">O 1º Distrito (Centro) continua sendo o principal polo de arrecadação.</p>
                     <div class="chart-container">
                         <canvas id="districtChart"></canvas>
                     </div>
                 </div>
                 <div class="bg-white rounded-xl shadow-lg p-6">
                     <h2 class="text-2xl font-bold text-center mb-1">Top 5 Bairros Contribuintes</h2>
-                    <p class="text-center text-gray-600 mb-6">Este gráfico destaca os bairros que mais contribuíram. O Parque da Cidade liderou, mas o volume agrupado em "Outros Bairros" mostra a ampla adesão da população.</p>
+                    <p class="text-center text-gray-600 mb-6">Parque da Cidade liderou, mas o volume de "Outros Bairros" mostra a ampla adesão.</p>
                      <div class="chart-container">
                         <canvas id="neighborhoodChart"></canvas>
                     </div>
                 </div>
             </div>
         </section>
-
-        <section id="highlights" class="mb-12">
-             <h2 class="text-2xl font-bold text-center mb-6">Destaques e Ocorrências do Mês</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-white rounded-xl shadow-lg p-6 flex items-center">
-                    <div class="text-4xl mr-4">🎉</div>
+        
+        <section id="weekly-details" class="mb-12">
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h2 class="text-2xl font-bold text-center mb-6">Detalhes da Coleta Semanal</h2>
+                <div class="space-y-8">
                     <div>
-                        <h3 class="text-xl font-bold text-[#00A0B0]">Evento de Sucesso</h3>
-                        <p class="text-gray-600 mt-1">A ação de conscientização no Condomínio Beverly Hills no dia 13/09 foi um sucesso, resultando na coleta de 30 litros de óleo e fortalecendo o engajamento comunitário.</p>
+                        <h3 class="text-lg font-bold text-gray-700 mb-2 border-b pb-2">Semana 1: Total 99,6 Litros</h3>
+                        <table class="w-full text-left text-sm">
+                            <thead><tr class="bg-gray-100"><th class="p-2">Data</th><th class="p-2">Local / Responsável</th><th class="p-2 text-right">Litros</th></tr></thead>
+                            <tbody>
+                                <tr class="border-b"><td class="p-2">Sexta, 12/09</td><td class="p-2">Vem Pra Orla</td><td class="p-2 text-right">25,0</td></tr>
+                                <tr class="border-b bg-gray-50"><td class="p-2">Sexta, 12/09</td><td class="p-2">Eventos</td><td class="p-2 text-right">30,0</td></tr>
+                                <tr class="border-b"><td class="p-2">Sexta, 12/09</td><td class="p-2">Centro2 - São José de Imbassaí (Luis/Cris)</td><td class="p-2 text-right">44,6</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-700 mb-2 border-b pb-2">Semana 2: Total 215,3 Litros</h3>
+                        <table class="w-full text-left text-sm">
+                             <thead><tr class="bg-gray-100"><th class="p-2">Data</th><th class="p-2">Local / Responsável</th><th class="p-2 text-right">Litros</th></tr></thead>
+                            <tbody>
+                                <tr class="border-b"><td class="p-2">Quinta, 18/09</td><td class="p-2">Itaipuaçu (Victoria)</td><td class="p-2 text-right">52,8</td></tr>
+                                <tr class="border-b bg-gray-50"><td class="p-2">Sexta, 19/09</td><td class="p-2">Inoã (Eliane)</td><td class="p-2 text-right">162,5</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-700 mb-2 border-b pb-2">Semana 3: Total 374,2 Litros</h3>
+                        <table class="w-full text-left text-sm">
+                             <thead><tr class="bg-gray-100"><th class="p-2">Data</th><th class="p-2">Local / Responsável</th><th class="p-2 text-right">Litros</th></tr></thead>
+                            <tbody>
+                                <tr class="border-b"><td class="p-2">Quarta, 24/09</td><td class="p-2">Ponta Negra (Julia)</td><td class="p-2 text-right">63,0</td></tr>
+                                <tr class="border-b bg-gray-50"><td class="p-2">Sexta, 26/09</td><td class="p-2">Centro (Viviane)</td><td class="p-2 text-right">146,0</td></tr>
+                                <tr class="border-b"><td class="p-2">Sexta, 26/09</td><td class="p-2">Centro2 - São José de Imbassaí (Luis/Cris)</td><td class="p-2 text-right">165,2</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                     <div>
+                        <h3 class="text-lg font-bold text-gray-700 mb-2 border-b pb-2">Semana 4: Total 564,0 Litros</h3>
+                        <table class="w-full text-left text-sm">
+                             <thead><tr class="bg-gray-100"><th class="p-2">Data</th><th class="p-2">Local / Responsável</th><th class="p-2 text-right">Litros</th></tr></thead>
+                            <tbody>
+                                <tr class="border-b"><td class="p-2">Segunda, 29/09</td><td class="p-2">Centro (Lhidia)</td><td class="p-2 text-right">444,0</td></tr>
+                                <tr class="border-b bg-gray-50"><td class="p-2">Terça, 30/09</td><td class="p-2">Inoã (Eliane)</td><td class="p-2 text-right">120,0</td></tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                <div class="bg-white rounded-xl shadow-lg p-6 flex items-center">
-                    <div class="text-4xl mr-4">⚠️</div>
-                    <div>
-                        <h3 class="text-xl font-bold text-[#EB6841]">Ponto de Atenção</h3>
-                        <p class="text-gray-600 mt-1">Um pequeno vazamento de 2 litros em 30/09 reforça a necessidade de um veículo específico para o programa, garantindo a segurança e eficiência das operações.</p>
-                    </div>
+            </div>
+        </section>
+
+        <section id="neighborhood-details" class="mb-12">
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h2 class="text-2xl font-bold text-center mb-6">Coleta Detalhada por Bairro (Lista Completa)</h2>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-4 text-sm">
+                    <div class="flex justify-between border-b pb-1"><span class="font-semibold">Parque da Cidade:</span><span>241,0 L</span></div>
+                    <div class="flex justify-between border-b pb-1"><span class="font-semibold">Santa Paula:</span><span>171,0 L</span></div>
+                    <div class="flex justify-between border-b pb-1"><span class="font-semibold">Flamengo:</span><span>115,5 L</span></div>
+                    <div class="flex justify-between border-b pb-1"><span class="font-semibold">São Jose de Imbassaí:</span><span>78,6 L</span></div>
+                    <div class="flex justify-between border-b pb-1"><span class="font-semibold">Manu Manuela:</span><span>67,0 L</span></div>
+                    <div class="flex justify-between border-b pb-1"><span class="font-semibold">Itapeba:</span><span>64,2 L</span></div>
+                    <div class="flex justify-between border-b pb-1"><span class="font-semibold">Mumbuca:</span><span>64,0 L</span></div>
+                    <div class="flex justify-between border-b pb-1"><span class="font-semibold">Araçatiba:</span><span>46,0 L</span></div>
+                    <div class="flex justify-between border-b pb-1"><span class="font-semibold">Barra:</span><span>42,0 L</span></div>
+                    <div class="flex justify-between border-b pb-1"><span class="font-semibold">Guaratiba:</span><span>42,0 L</span></div>
+                    <div class="flex justify-between border-b pb-1"><span class="font-semibold">São Bento da Lagoa:</span><span>38,8 L</span></div>
+                    <div class="flex justify-between border-b pb-1"><span class="font-semibold">Chacará de Inoã:</span><span>37,0 L</span></div>
+                    <div class="flex justify-between border-b pb-1"><span class="font-semibold">Jacaroá:</span><span>35,0 L</span></div>
+                    <div class="flex justify-between border-b pb-1"><span class="font-semibold">SPAR:</span><span>30,5 L</span></div>
+                    <div class="flex justify-between border-b pb-1"><span class="font-semibold">Eventos:</span><span>30,0 L</span></div>
+                    <div class="flex justify-between border-b pb-1"><span class="font-semibold">Vem pra Orla:</span><span>25,0 L</span></div>
+                    <div class="flex justify-between border-b pb-1"><span class="font-semibold">Inoã:</span><span>24,0 L</span></div>
+                    <div class="flex justify-between border-b pb-1"><span class="font-semibold">Marques:</span><span>23,5 L</span></div>
+                    <div class="flex justify-between border-b pb-1"><span class="font-semibold">Boqueirão:</span><span>23,0 L</span></div>
+                    <div class="flex justify-between border-b pb-1"><span class="font-semibold">Vivendas:</span><span>20,0 L</span></div>
+                    <div class="flex justify-between border-b pb-1"><span class="font-semibold">Cordeirinho:</span><span>15,0 L</span></div>
+                    <div class="flex justify-between border-b pb-1"><span class="font-semibold">Jardim Atlantico Leste:</span><span>14,0 L</span></div>
+                    <div class="flex justify-between border-b pb-1"><span class="font-semibold">Bambui:</span><span>3,0 L</span></div>
+                    <div class="flex justify-between border-b pb-1"><span class="font-semibold">Ponta Negra:</span><span>3,0 L</span></div>
                 </div>
             </div>
         </section>
 
     </main>
 
-    <footer class="text-center py-6 bg-gray-800 text-white mt-8">
+    <footer class="text-center py-8 bg-gray-800 text-white mt-8">
         <p>&copy; 2025 Programa De Boa com o Óleo - Sanemar</p>
     </footer>
 
