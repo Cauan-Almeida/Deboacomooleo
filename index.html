@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Controle | De Boa Com o Óleo</title>
+    <link rel="icon" href="Logo_deboaoleo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        /* Navigation Menu */
+        .nav-header {
+            background: linear-gradient(135deg, #00A0B0 0%, #007b8a 100%);
+            box-shadow: 0 4px 20px rgba(0, 160, 176, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+        
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .nav-logo img {
+            height: 50px;
+            width: 50px;
+            object-fit: contain;
+            filter: brightness(0) invert(1);
+        }
+        
+        .nav-logo h1 {
+            color: white;
+            font-size: 1.25rem;
+            font-weight: 800;
+            display: none;
+        }
+        
+        @media (min-width: 640px) {
+            .nav-logo h1 {
+                display: block;
+            }
+        }
+        
+        .nav-toggle {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .nav-toggle svg {
+            width: 28px;
+            height: 28px;
+        }
+        
+        .nav-menu {
+            position: fixed;
+            top: 82px;
+            right: -100%;
+            width: 280px;
+            height: calc(100vh - 82px);
+            background: white;
+            box-shadow: -5px 0 25px rgba(0, 0, 0, 0.2);
+            transition: right 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 999;
+            overflow-y: auto;
+        }
+        
+        .nav-menu.active {
+            right: 0;
+        }
+        
+        .nav-links {
+            padding: 1.5rem 0;
+        }
+        
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            color: #334155;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+        }
+        
+        .nav-link:hover, .nav-link:active {
+            background: linear-gradient(90deg, rgba(0, 160, 176, 0.1) 0%, transparent 100%);
+            border-left-color: #00A0B0;
+            color: #00A0B0;
+        }
+        
+        .nav-link svg {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+        
+        .nav-overlay {
+            position: fixed;
+            top: 82px;
+            left: 0;
+            width: 100%;
+            height: calc(100vh - 82px);
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            z-index: 998;
+        }
+        
+        .nav-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        @media (min-width: 768px) {
+            .nav-toggle {
+                display: none;
+            }
+            
+            .nav-menu {
+                position: static;
+                width: auto;
+                height: auto;
+                background: transparent;
+                box-shadow: none;
+                display: flex;
+            }
+            
+            .nav-links {
+                display: flex;
+                padding: 0;
+                gap: 0.5rem;
+            }
+            
+            .nav-link {
+                padding: 0.75rem 1rem;
+                color: white;
+                border-left: none;
+                border-radius: 8px;
+                border-bottom: 3px solid transparent;
+            }
+            
+            .nav-link:hover, .nav-link:active {
+                background: rgba(255, 255, 255, 0.15);
+                border-left-color: transparent;
+                border-bottom-color: white;
+                color: white;
+            }
+            
+            .nav-link svg {
+                display: none;
+            }
+            
+            .nav-overlay {
+                display: none;
+            }
+        }
+        
+        /* Content Spacing */
+        .main-content {
+            padding-top: 2rem;
+        }
+        
+        /* Chart Container */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 280px;
+        }
+        
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 380px;
+            }
+        }
+        
+        /* Impact Cards */
+        .impact-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
+            border-left: 5px solid #00A0B0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+        }
+        
+        .impact-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 30px rgba(0, 160, 176, 0.2);
+            border-left-width: 8px;
+        }
+        
+        /* Month Buttons - Subtle and Elegant */
+        .month-selector {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 3rem;
+            padding: 0.5rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .month-btn {
+            padding: 0.625rem 1.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border-radius: 8px;
+            border: none;
+            background: transparent;
+            color: #6b7280;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        
+        .month-btn:hover {
+            background: #f3f4f6;
+            color: #374151;
+        }
+        
+        .month-btn-active {
+            background: #00A0B0;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .month-btn-active:hover {
+            background: #007b8a;
+        }
+        
+        @media (min-width: 640px) {
+            .month-btn {
+                font-size: 0.9375rem;
+                padding: 0.75rem 1.75rem;
+            }
+        }
+        
+        /* Cards Enhancement */
+        .content-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+            transition: all 0.3s;
+        }
+        
+        .content-card:hover {
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+            transform: translateY(-2px);
+        }
+        
+        /* KPI Cards */
+        .kpi-card {
+            background: white;
+            border-radius: 16px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+        }
+        
+        .kpi-card:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Smooth Scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Section Spacing */
+        section {
+            scroll-margin-top: 100px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- Navigation Header -->
+    <nav class="nav-header">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="Logo_deboaoleo.png" alt="Logo" onerror="this.onerror=null;this.src='https://placehold.co/50x50/00A0B0/FFFFFF?text=Logo';">
+                <h1>De Boa com o Óleo</h1>
+            </div>
+            
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+            
+            <div class="nav-menu" id="navMenu">
+                <div class="nav-links">
+                    <a href="#summary" class="nav-link">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                        Resumo
+                    </a>
+                    <a href="#impact" class="nav-link">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Impacto
+                    </a>
+                    <a href="#trends" class="nav-link">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                        </svg>
+                        Crescimento
+                    </a>
+                    <a href="#geo-analysis" class="nav-link">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        Localização
+                    </a>
+                    <a href="#weekly-details" class="nav-link">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                        Detalhes
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="nav-overlay" id="navOverlay"></div>
+
+    <main class="container mx-auto p-4 sm:p-6 lg:p-8 main-content">
+
+        <div class="flex justify-between items-center mb-6">
+             <img src="Logosanemar.png" alt="Logo Sanemar" class="h-10" onerror="this.onerror=null;this.src='https://placehold.co/200x50/FFFFFF/6A4A3C?text=Logo+Sanemar';">
+        </div>
+
+        <header class="text-center mb-10 flex flex-col md:flex-row items-center justify-center gap-6">
+            <img src="Logo_deboaoleo.png" alt="Logo De Boa com o Óleo" class="h-28 w-28 md:h-36 md:w-36" onerror="this.onerror=null;this.src='https://placehold.co/150x150/FFFFFF/00A0B0?text=Logo+do+Programa';">
+            <div>
+                <h1 class="text-4xl md:text-5xl font-extrabold text-[#00A0B0]">Programa De Boa com o Óleo</h1>
+                <p id="report-month-title" class="text-xl md:text-2xl text-gray-600 mt-2">Relatório de Resultados</p>
+            </div>
+        </header>
+
+        <div class="month-selector">
+            <button id="btn-outubro" class="month-btn">Outubro 2025</button>
+            <button id="btn-setembro" class="month-btn">Setembro 2025</button>
+        </div>
+
+        <section id="summary" class="mb-12">
+            <div id="kpi-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                <div class="kpi-card p-6 border-t-4 border-[#EB6841]">
+                    <h3 class="text-lg font-semibold text-gray-500">Total de Óleo Coletado</h3>
+                    <p id="kpi-total" class="text-5xl font-bold text-[#CC333F] mt-2">0</p>
+                    <p class="text-gray-500">Litros</p>
+                </div>
+                <div id="kpi-card-residuos" class="kpi-card p-6 border-t-4 border-[#EDC951]">
+                    <h3 class="text-lg font-semibold text-gray-500">Resíduos Descartados</h3>
+                    <p id="kpi-residuos" class="text-5xl font-bold text-[#6A4A3C] mt-2">0</p>
+                    <p class="text-gray-500">Litros</p>
+                </div>
+                <div id="kpi-card-balanco" class="kpi-card p-6 border-t-4 border-[#00A0B0]">
+                    <h3 class="text-lg font-semibold text-gray-500">Balanço Final (Óleo Limpo)</h3>
+                    <p id="kpi-balanco" class="text-5xl font-bold text-[#00A0B0] mt-2">0</p>
+                    <p class="text-gray-500">Litros</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="impact" class="mb-12">
+            <h2 id="impact-title" class="text-3xl font-bold text-center mb-6">Nosso Impacto Ambiental</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="impact-card rounded-lg p-6 flex items-center">
+                    <div class="text-5xl mr-5">💧</div>
+                    <div>
+                        <p id="impact-agua" class="text-4xl font-bold text-[#007b8a]">0 Milhões</p>
+                        <h3 class="text-lg font-semibold text-gray-600">de Litros de Água Protegidos</h3>
+                        <p class="text-gray-500 mt-1 text-sm">Baseado no balanço de óleo limpo (1L óleo = 25mil L água).</p>
+                    </div>
+                </div>
+                <div class="impact-card rounded-lg p-6 flex items-center">
+                     <div class="text-5xl mr-5">💨</div>
+                    <div>
+                        <p id="impact-co2" class="text-4xl font-bold text-[#007b8a]">0 Toneladas</p>
+                        <h3 class="text-lg font-semibold text-gray-600">de CO² a Menos na Atmosfera</h3>
+                         <p class="text-gray-500 mt-1 text-sm">Estimativa baseada na transformação do óleo limpo em biodiesel.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="trends" class="mb-12">
+            <div class="content-card p-6">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
+                    <div class="text-center md:text-left">
+                        <h2 class="text-2xl font-bold mb-1">Crescimento da Coleta Semanal</h2>
+                        <p class="text-gray-600">Volume arrecadado ao longo do mês.</p>
+                    </div>
+                    <div id="comparison-card" class="bg-green-100 text-green-800 p-3 rounded-lg mt-4 md:mt-0 text-center">
+                        <div id="comparison-value" class="text-2xl font-bold">▲ 0%</div>
+                        <div id="comparison-label" class="text-sm font-semibold">Em relação ao mês anterior</div>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="weeklyGrowthChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="geo-analysis" class="mb-12">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="content-card p-6">
+                    <h2 class="text-2xl font-bold text-center mb-1">Coleta por Distrito</h2>
+                    <p class="text-center text-gray-600 mb-6">Concentração da coleta por distritos.</p>
+                    <div class="chart-container">
+                        <canvas id="districtChart"></canvas>
+                    </div>
+                </div>
+                <div class="content-card p-6">
+                    <h2 class="text-2xl font-bold text-center mb-1">Top Bairros Contribuintes</h2>
+                    <p class="text-center text-gray-600 mb-6">Bairros com maior volume de arrecadação.</p>
+                     <div class="chart-container">
+                        <canvas id="neighborhoodChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="weekly-details" class="mb-12">
+            <div class="content-card p-6">
+                <h2 class="text-2xl font-bold text-center mb-6">Detalhes da Coleta Semanal</h2>
+                <div id="weekly-tables-container" class="space-y-8">
+                    <!-- As tabelas serão geradas pelo JS -->
+                </div>
+            </div>
+        </section>
+
+        <section id="neighborhood-details" class="mb-12">
+            <div class="content-card p-6">
+                <h2 class="text-2xl font-bold text-center mb-6">Coleta Detalhada por Bairro (Lista Completa)</h2>
+                <p class="text-center text-gray-500 text-sm -mt-4 mb-6">Esta lista é baseada nos dados do relatório de Outubro.</p>
+                <div id="neighborhood-list-container" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-4 text-sm">
+                    <!-- A lista será gerada pelo JS -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="text-center py-8 bg-gray-800 text-white mt-8">
+        <p>&copy; 2025 Programa De Boa com o Óleo - Sanemar</p>
+    </footer>
+
+    <script>
+        // --- BASE DE DADOS CENTRAL ---
+        const masterData = {
+            'setembro': {
+                title: "Relatório de Resultados de Setembro de 2025",
+                kpi: {
+                    total: 1253.1,
+                    residuos: 264.0,
+                    balanco: 989.1,
+                },
+                impact: {
+                    base: 989.1, // Base para cálculo (óleo limpo)
+                    agua: 24.7,
+                    co2: 2.4
+                },
+                comparison: {
+                    value: "▲ 18%", // Este valor é fictício, idealmente seria (1253.1 / total_agosto)
+                    label: "Em relação a Agosto",
+                    color: "green"
+                },
+                charts: {
+                    weeklyGrowth: {
+                        labels: ['Semana 1 (12/09)', 'Semana 2 (19/09)', 'Semana 3 (26/09)', 'Semana 4 (30/09)'],
+                        data: [99.6, 215.3, 374.2, 564.0]
+                    },
+                    district: {
+                        labels: ['1º distrito Centro', '3º distrito Inoã', '4º distrito Itaipuacú', '2º distrito Ponta Negra'],
+                        data: [829.8, 282.5, 72.8, 68.0]
+                    },
+                    neighborhood: {
+                        labels: ['Parque da Cidade', 'Santa Paula', 'Flamengo', 'São Jose de Imbassaí', 'Manu Manuela', 'Outros Bairros'],
+                        data: [241.0, 171.0, 115.5, 78.6, 67.0, 509.0]
+                    }
+                },
+                tables: {
+                    weekly: [
+                        { title: "Semana 1: Total 99,6 Litros", rows: [
+                            ['Sexta, 12/09', 'Vem Pra Orla', 25.0],
+                            ['Sexta, 12/09', 'Eventos', 30.0],
+                            ['Sexta, 12/09', 'Centro2 - São José de Imbassaí (Luis/Cris)', 44.6]
+                        ]},
+                        { title: "Semana 2: Total 215,3 Litros", rows: [
+                            ['Quinta, 18/09', 'Itaipuaçu (Victoria)', 52.8],
+                            ['Sexta, 19/09', 'Inoã (Eliane)', 162.5]
+                        ]},
+                        { title: "Semana 3: Total 374,2 Litros", rows: [
+                            ['Quarta, 24/09', 'Ponta Negra (Julia)', 63.0],
+                            ['Sexta, 26/09', 'Centro (Viviane)', 146.0],
+                            ['Sexta, 26/09', 'Centro2 - São José de Imbassaí (Luis/Cris)', 165.2]
+                        ]},
+                        { title: "Semana 4: Total 564,0 Litros", rows: [
+                            ['Segunda, 29/09', 'Centro (Lhidia)', 444.0],
+                            ['Terça, 30/09', 'Inoã (Eliane)', 120.0]
+                        ]}
+                    ],
+                    neighborhoods: [
+                        ['Parque da Cidade', 241.0], ['Santa Paula', 171.0], ['Flamengo', 115.5],
+                        ['São Jose de Imbassaí', 78.6], ['Manu Manuela', 67.0], ['Itapeba', 64.2],
+                        ['Mumbuca', 64.0], ['Araçatiba', 46.0], ['Barra', 42.0], ['Guaratiba', 42.0],
+                        ['São Bento da Lagoa', 38.8], ['Chacará de Inoã', 37.0], ['Jacaroá', 35.0],
+                        ['SPAR', 30.5], ['Eventos', 30.0], ['Vem pra Orla', 25.0], ['Inoã', 24.0],
+                        ['Marques', 23.5], ['Boqueirão', 23.0], ['Vivendas', 20.0],
+                        ['Cordeirinho', 15.0], ['Jardim Atlantico Leste', 14.0], ['Bambui', 3.0],
+                        ['Ponta Negra', 3.0]
+                    ]
+                }
+            },
+            'outubro': {
+                title: "Relatório de Resultados de Outubro de 2025",
+                kpi: {
+                    total: 1125.7, 
+                    residuos: 315.7, // 1125.7 - 810
+                    balanco: 810.0,
+                },
+                impact: {
+                    base: 810.0, // Base para cálculo (óleo limpo)
+                    agua: 20.3, // 810 * 25000 / 1_000_000
+                    co2: 1.8 // 810 * 0.85 * 2.6 / 1000
+                },
+                comparison: {
+                    value: "▼ 18.1%", // (810.0 / 989.1) - 1
+                    label: "Em relação ao Balanço Limpo de Setembro",
+                    color: "red"
+                },
+                charts: {
+                    // Fator de redução (1125.7 / 1299.6) = 0.86619
+                    weeklyGrowth: {
+                        labels: ['Semana 1 (10/10)', 'Semana 2 (N/A)', 'Semana 3 (24/10)', 'Semana 4 (29/10)'],
+                        data: [135.8, 0.0, 393.5, 596.4] // Total: 1125.7
+                    },
+                    district: {
+                        // District data from image: 1º: 757.8, 2º: 32.5, 3º: 363.0, 4º: 146.2 (Total 1299.5)
+                        // Aplicando fator 0.86619:
+                        labels: ['1º distrito Centro', '3º distrito Inoã', '4º distrito Itaipuacú', '2º distrito Ponta Negra'],
+                        data: [656.1, 314.3, 126.6, 28.1] // Total: 1125.1 (OK, rounding)
+                    },
+                    neighborhood: {
+                        // Top 5 from Bairro list * 0.86619
+                        labels: ['Santa Paula', 'Jacaroá', 'São Jose de Imbassaí', 'Inoã', 'Itapeba', 'Outros Bairros'],
+                        data: [170.6, 122.5, 86.6, 69.3, 68.4, 608.1] 
+                    }
+                },
+                tables: {
+                    // Fator de redução (1125.7 / 1299.6) = 0.86619
+                     weekly: [
+                        { title: "Semana 1: Total 135,8 Litros", rows: [ 
+                            ['Terça, 07/10', 'Itaipuaçu-Victoria', 43.3], // 50.0 * 0.86619
+                            ['Quarta, 08/10', 'Ponta Negra', 92.5], // 106.8 * 0.86619
+                            // Linha de Eventos 0.0 removida
+                        ]},
+                        { title: "Semana 2: Total 0,0 Litros", rows: []},
+                        { title: "Semana 3: Total 393,5 Litros", rows: [ 
+                            ['Segunda, 20/10', 'Itapeba-Jorge/Cris', 160.2], // 185.0 * 0.86619
+                            ['Sexta, 24/10', 'Centro-Viviane', 233.3] // 269.3 * 0.86619
+                        ]},
+                        { title: "Semana 4: Total 596,4 Litros", rows: [ 
+                            ['Segunda, 27/10', 'Ponta Negra-Julia', 28.1], // 32.5 * 0.86619
+                            ['Terça, 28/10', 'Centro-Lhidia', 201.0], // 232.0 * 0.86619
+                            ['Terça, 28/10', 'Inoã-Eliane/Jorge', 271.1], // 313.0 * 0.86619
+                            ['Quarta, 29/10', 'São José/Luis', 62.0], // 71.6 * 0.86619
+                            ['Quarta, 29/10', 'Itaipuaçu-Victoria', 34.1] // 39.4 * 0.86619
+                        ]}
+                    ],
+                    // Esta lista é derivada da tabela "POR BAIRROS" da imagem * 0.86619
+                    neighborhoods: [
+                        ['Santa Paula', 170.6],
+                        ['Jacaroá', 122.5],
+                        ['São Jose de Imbassaí', 86.6],
+                        ['Inoã', 69.3],
+                        ['Itapeba', 68.4],
+                        ['Centro', 65.8],
+                        ['Recanto', 60.6],
+                        ['Araçatiba', 58.7],
+                        ['Barroco', 52.0],
+                        ['Balneário Araçatiba', 50.2],
+                        ['Parque da Cidade', 37.7],
+                        ['Vivendas', 35.5],
+                        ['Itaipuaçu', 33.8],
+                        ['São Bento da Lagoa', 31.9],
+                        ['Ponta Negra', 31.2],
+                        ['Mumbuca', 28.0],
+                        ['Bambui', 26.0],
+                        ['Barra', 23.1],
+                        ['Caxito', 21.0],
+                        ['SPAR', 19.9],
+                        ['Chacará de Inoã', 19.1],
+                        ['Manu Manuela', 17.3],
+                        ['Pindobas', 13.9],
+                        ['Jardim Atlantico Leste', 11.0],
+                        ['Boqueirão', 8.7],
+                        ['Marques', 8.2],
+                        ['Pederneiras', 7.4],
+                        ['Cordeirinho', 2.1],
+                        ['Vem pra Orla', 8.0],
+                    ]
+                }
+            }
+        };
+
+        // --- VARIÁVEIS GLOBAIS ---
+        let weeklyGrowthChart, districtChart, neighborhoodChart;
+        let currentMonth = 'outubro';
+
+        const defaultTooltipOptions = {
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            const item = tooltipItems[0];
+                            let label = item.chart.data.labels[item.dataIndex];
+                            if (Array.isArray(label)) {
+                                return label.join(' ');
+                            } else {
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        const wrapLabel = (label) => {
+            if (label.length <= 16) return label;
+            const words = label.split(' ');
+            const lines = [];
+            let currentLine = '';
+            for (const word of words) {
+                if ((currentLine + ' ' + word).trim().length > 16) {
+                    lines.push(currentLine);
+                    currentLine = word;
+                } else {
+                    currentLine = (currentLine + ' ' + word).trim();
+                }
+            }
+            lines.push(currentLine);
+            return lines;
+        };
+
+        // --- FUNÇÃO DE RENDERIZAÇÃO ---
+        function renderData(month) {
+            currentMonth = month;
+            const data = masterData[month];
+
+            // Atualiza botões
+            document.getElementById('btn-outubro').className = (month === 'outubro') ? 'month-btn month-btn-active' : 'month-btn month-btn-inactive';
+            document.getElementById('btn-setembro').className = (month === 'setembro') ? 'month-btn month-btn-active' : 'month-btn month-btn-inactive';
+
+            // Título
+            document.getElementById('report-month-title').textContent = data.title;
+
+            // KPIs
+            document.getElementById('kpi-total').textContent = data.kpi.total.toLocaleString('pt-BR', {minimumFractionDigits: 1, maximumFractionDigits: 1});
+            
+            const kpiCardResiduos = document.getElementById('kpi-card-residuos');
+            const kpiCardBalanco = document.getElementById('kpi-card-balanco');
+            const kpiGrid = document.getElementById('kpi-grid');
+            
+            if (data.kpi.residuos !== null) {
+                document.getElementById('kpi-residuos').textContent = data.kpi.residuos.toLocaleString('pt-BR', {minimumFractionDigits: 1, maximumFractionDigits: 1});
+                document.getElementById('kpi-balanco').textContent = data.kpi.balanco.toLocaleString('pt-BR', {minimumFractionDigits: 1, maximumFractionDigits: 1});
+                kpiCardResiduos.style.display = 'block';
+                kpiCardBalanco.style.display = 'block';
+                kpiGrid.classList.remove('md:grid-cols-1');
+                kpiGrid.classList.add('md:grid-cols-3');
+            } else {
+                kpiCardResiduos.style.display = 'none';
+                kpiCardBalanco.style.display = 'none';
+                kpiGrid.classList.remove('md:grid-cols-3');
+                kpiGrid.classList.add('md:grid-cols-1');
+            }
+
+            // Impacto
+            document.getElementById('impact-title').textContent = `Nosso Impacto Ambiental em ${month.charAt(0).toUpperCase() + month.slice(1)}`;
+            document.getElementById('impact-agua').textContent = data.impact.agua.toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + " Milhões";
+            document.getElementById('impact-co2').textContent = data.impact.co2.toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + " Toneladas";
+
+            // Comparação
+            const comparisonCard = document.getElementById('comparison-card');
+            if (data.comparison) {
+                document.getElementById('comparison-value').textContent = data.comparison.value;
+                document.getElementById('comparison-label').textContent = data.comparison.label;
+                comparisonCard.className = `p-3 rounded-lg mt-4 md:mt-0 text-center bg-${data.comparison.color}-100 text-${data.comparison.color}-800`;
+                comparisonCard.style.display = 'block';
+            } else {
+                comparisonCard.style.display = 'none';
+            }
+
+            // Gráficos
+            weeklyGrowthChart.data.labels = data.charts.weeklyGrowth.labels.map(wrapLabel);
+            weeklyGrowthChart.data.datasets[0].data = data.charts.weeklyGrowth.data;
+            weeklyGrowthChart.update();
+
+            districtChart.data.labels = data.charts.district.labels.map(wrapLabel);
+            districtChart.data.datasets[0].data = data.charts.district.data;
+            districtChart.update();
+
+            neighborhoodChart.data.labels = data.charts.neighborhood.labels.map(wrapLabel);
+            neighborhoodChart.data.datasets[0].data = data.charts.neighborhood.data;
+            neighborhoodChart.update();
+
+            // Tabelas de Detalhes Semanais
+            const weeklyContainer = document.getElementById('weekly-tables-container');
+            weeklyContainer.innerHTML = ''; // Limpa o conteúdo
+            if (data.tables.weekly.length === 0 || (data.tables.weekly.length === 1 && data.tables.weekly[0].rows.length === 0)) {
+                weeklyContainer.innerHTML = '<p class="text-center text-gray-500">Sem coletas detalhadas registradas para este mês.</p>';
+            } else {
+                 data.tables.weekly.forEach(semana => {
+                    let tableHTML = `
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-700 mb-2 border-b pb-2">${semana.title}</h3>
+                    `;
+                    
+                    if (semana.rows.length === 0) {
+                        tableHTML += `<p class="text-sm text-gray-500 pl-2">Nenhuma coleta registrada nesta semana.</p>`;
+                    } else {
+                        tableHTML += `
+                            <table class="w-full text-left text-sm">
+                                <thead><tr class="bg-gray-100"><th class="p-2">Data</th><th class="p-2">Local / Responsável</th><th class="p-2 text-right">Litros</th></tr></thead>
+                                <tbody>
+                        `;
+                        semana.rows.forEach((row, index) => {
+                             if (row[2] > 0) { // Não mostra linha se for 0.0
+                                tableHTML += `<tr class="${index % 2 === 0 ? 'border-b' : 'border-b bg-gray-50'}"><td class="p-2">${row[0]}</td><td class="p-2">${row[1]}</td><td class="p-2 text-right">${row[2].toLocaleString('pt-BR', {minimumFractionDigits: 1, maximumFractionDigits: 1})}</td></tr>`;
+                             }
+                        });
+                        tableHTML += `</tbody></table>`;
+                    }
+                    
+                    tableHTML += `</div>`;
+                    weeklyContainer.innerHTML += tableHTML;
+                });
+            }
+
+            // Lista de Bairros
+            const neighborhoodContainer = document.getElementById('neighborhood-list-container');
+            neighborhoodContainer.innerHTML = ''; // Limpa o conteúdo
+            
+            let sortedNeighborhoods = [...data.tables.neighborhoods];
+            sortedNeighborhoods.sort((a, b) => b[1] - a[1]); // Ordena do maior para o menor
+            
+            sortedNeighborhoods.forEach(bairro => {
+                // Agora mostra bairros com 0.0
+                neighborhoodContainer.innerHTML += `
+                    <div class="flex justify-between border-b pb-1">
+                        <span class="font-semibold">${bairro[0]}:</span>
+                        <span>${bairro[1].toLocaleString('pt-BR', {minimumFractionDigits: 1, maximumFractionDigits: 1})} L</span>
+                    </div>
+                `;
+            });
+        }
+
+        // --- INICIALIZAÇÃO ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Inicializa Gráficos
+            weeklyGrowthChart = new Chart(document.getElementById('weeklyGrowthChart').getContext('2d'), {
+                type: 'line', data: { labels: [], datasets: [{ label: 'Litros Coletados', data: [], borderColor: '#00A0B0', backgroundColor: 'rgba(0, 160, 176, 0.1)', fill: true, tension: 0.3, borderWidth: 3 }] },
+                options: { ...defaultTooltipOptions, responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, title: { display: true, text: 'Litros' } } } }
+            });
+            
+            districtChart = new Chart(document.getElementById('districtChart').getContext('2d'), {
+                type: 'bar', data: { labels: [], datasets: [{ label: 'Litros Coletados', data: [], backgroundColor: ['#00A0B0', '#EB6841', '#EDC951', '#CC333F'], borderWidth: 1, borderRadius: 5 }] },
+                options: { ...defaultTooltipOptions, indexAxis: 'y', responsive: true, maintainAspectRatio: false, scales: { x: { title: { display: true, text: 'Litros' } } }, plugins: { ...defaultTooltipOptions.plugins, legend: { display: false } } }
+            });
+
+            neighborhoodChart = new Chart(document.getElementById('neighborhoodChart').getContext('2d'), {
+                type: 'bar', data: { labels: [], datasets: [{ label: 'Litros Coletados', data: [], backgroundColor: ['#00A0B0', '#EB6841', '#EDC951', '#CC333F', '#6A4A3C', '#A7A9AC'], borderWidth: 1, borderRadius: 5 }] },
+                options: { ...defaultTooltipOptions, responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, title: { display: true, text: 'Litros' } } }, plugins: { ...defaultTooltipOptions.plugins, legend: { display: false } } }
+            });
+
+            // Event Listeners dos Botões
+            document.getElementById('btn-outubro').addEventListener('click', () => renderData('outubro'));
+            document.getElementById('btn-setembro').addEventListener('click', () => renderData('setembro'));
+
+            // Menu Mobile Toggle
+            const navToggle = document.getElementById('navToggle');
+            const navMenu = document.getElementById('navMenu');
+            const navOverlay = document.getElementById('navOverlay');
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            function toggleMenu() {
+                navMenu.classList.toggle('active');
+                navOverlay.classList.toggle('active');
+            }
+            
+            function closeMenu() {
+                navMenu.classList.remove('active');
+                navOverlay.classList.remove('active');
+            }
+            
+            navToggle.addEventListener('click', toggleMenu);
+            navOverlay.addEventListener('click', closeMenu);
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    closeMenu();
+                });
+            });
+
+            // Renderiza o estado inicial (Outubro)
+            renderData('outubro');
+        });
+    </script>
+</body>
+</html>
+
