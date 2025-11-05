@@ -240,6 +240,9 @@
             width: fit-content;
             margin-left: auto;
             margin-right: auto;
+            position: sticky;
+            top: 90px;
+            z-index: 100;
         }
         
         .month-btn {
@@ -264,6 +267,7 @@
             background: #00A0B0;
             color: white;
             font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0, 160, 176, 0.3);
         }
         
         .month-btn-active:hover {
@@ -822,9 +826,16 @@
                 options: { ...defaultTooltipOptions, responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, title: { display: true, text: 'Litros' } } }, plugins: { ...defaultTooltipOptions.plugins, legend: { display: false } } }
             });
 
-            // Event Listeners dos Botões
-            document.getElementById('btn-outubro').addEventListener('click', () => renderData('outubro'));
-            document.getElementById('btn-setembro').addEventListener('click', () => renderData('setembro'));
+            // Event Listeners dos Botões de Mês
+            document.getElementById('btn-outubro').addEventListener('click', () => {
+                renderData('outubro');
+                localStorage.setItem('selectedMonth', 'outubro');
+            });
+            
+            document.getElementById('btn-setembro').addEventListener('click', () => {
+                renderData('setembro');
+                localStorage.setItem('selectedMonth', 'setembro');
+            });
 
             // Menu Mobile Toggle
             const navToggle = document.getElementById('navToggle');
@@ -846,13 +857,17 @@
             navOverlay.addEventListener('click', closeMenu);
             
             navLinks.forEach(link => {
-                link.addEventListener('click', () => {
+                link.addEventListener('click', (e) => {
                     closeMenu();
+                    // Mantém o mês selecionado ao navegar pelo menu
+                    const selectedMonth = localStorage.getItem('selectedMonth') || 'outubro';
+                    setTimeout(() => renderData(selectedMonth), 100);
                 });
             });
 
-            // Renderiza o estado inicial (Outubro)
-            renderData('outubro');
+            // Renderiza o estado inicial (usa o último mês selecionado ou Outubro como padrão)
+            const initialMonth = localStorage.getItem('selectedMonth') || 'outubro';
+            renderData(initialMonth);
         });
     </script>
 </body>
