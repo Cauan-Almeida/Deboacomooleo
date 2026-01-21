@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório Anual 2025 | De Boa Com o Óleo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Animate On Scroll Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Manrope:wght@200;300;400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --gold: #d4af37;
+            --dark-gold: #aa8c2c;
+            --deep-blue: #020617;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+        }
+        
+        body { 
+            font-family: 'Manrope', sans-serif; 
+            background-color: var(--deep-blue); 
+            color: #e2e8f0; 
+            overflow-x: hidden; 
+        }
+        
+        h1, h2, h3, .serif { font-family: 'Cinzel', serif; }
+        
+        .text-gold { color: var(--gold); }
+        .text-gradient {
+            background: linear-gradient(135deg, #d4af37 0%, #f3e5ab 50%, #aa8c2c 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .glass-panel {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        /* Fundo Limpo para o Hero */
+        .hero-clean {
+            background-color: var(--deep-blue);
+        }
+
+        /* Sombra Específica para o 2025 */
+        .shadow-title {
+            text-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            top: 0; bottom: 0; left: 50%;
+            width: 1px;
+            background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+            transform: translateX(-50%);
+        }
+        
+        @media (max-width: 768px) {
+            .timeline-line::before {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- HERO SECTION (Updated) -->
+    <header class="hero-clean min-h-screen flex flex-col justify-center items-center text-center px-4 relative overflow-hidden">
+        
+        <div data-aos="fade-down" data-aos-duration="1500" class="relative z-10">
+            <img src="Logo_deboaoleo.png?v=2" alt="De Boa com o Óleo" class="h-24 mx-auto mb-12">
+        </div>
+
+        <div class="relative z-10">
+            <!-- Texto Superior -->
+            <p class="text-gold tracking-[0.4em] text-lg md:text-xl mb-2 uppercase font-bold" data-aos="fade-up">
+                RELATÓRIO ANUAL
+            </p>
+            
+            <!-- 2025 Grande -->
+            <h1 class="text-[8rem] md:text-[13rem] font-bold text-white leading-none serif shadow-title mb-8" data-aos="zoom-in" data-aos-duration="1200">
+                2025
+            </h1>
+
+            <p class="text-slate-400 max-w-xl mx-auto text-base font-light leading-relaxed mb-12" data-aos="fade-up" data-aos-delay="400">
+                Uma jornada de recordes operacionais, expansão territorial e compromisso inegociável com a sustentabilidade hídrica de Maricá.
+            </p>
+
+            <div data-aos="fade-up" data-aos-delay="600">
+                <a href="#kpis" class="inline-block px-10 py-4 border border-gold text-gold hover:bg-gold hover:text-black transition-all duration-300 uppercase tracking-widest text-xs font-bold rounded-sm">
+                    Explorar Dados
+                </a>
+            </div>
+        </div>
+        
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce text-slate-600">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+        </div>
+    </header>
+
+    <!-- KPI SECTION (NUMBERS) -->
+    <section id="kpis" class="py-24 px-4 bg-[#020617] relative">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <!-- Total Coletado -->
+                <div class="glass-panel p-8 rounded-xl text-center group hover:bg-white/5 transition-all duration-500" data-aos="fade-up">
+                    <div class="text-4xl mb-4 group-hover:scale-110 transition-transform duration-500">🛢️</div>
+                    <div class="text-5xl font-bold text-white mb-2 font-mono counter" data-target="8364">0</div>
+                    <div class="h-0.5 w-12 bg-gold mx-auto mb-3"></div>
+                    <p class="text-slate-400 text-xs uppercase tracking-widest">Litros Coletados (Total)</p>
+                </div>
+                
+                <!-- Água Protegida -->
+                <div class="glass-panel p-8 rounded-xl text-center group hover:bg-white/5 transition-all duration-500" data-aos="fade-up" data-aos-delay="100">
+                    <div class="text-4xl mb-4 group-hover:scale-110 transition-transform duration-500">💧</div>
+                    <div class="text-5xl font-bold text-cyan-400 mb-2 font-mono counter" data-target="209">0</div>
+                    <div class="h-0.5 w-12 bg-cyan-900 mx-auto mb-3"></div>
+                    <p class="text-slate-400 text-xs uppercase tracking-widest">Milhões de L. de Água Preservados</p>
+                </div>
+
+                <!-- CO2 Evitado -->
+                <div class="glass-panel p-8 rounded-xl text-center group hover:bg-white/5 transition-all duration-500" data-aos="fade-up" data-aos-delay="200">
+                    <div class="text-4xl mb-4 group-hover:scale-110 transition-transform duration-500">🌱</div>
+                    <div class="text-5xl font-bold text-emerald-400 mb-2 font-mono counter" data-target="19">0</div>
+                    <div class="h-0.5 w-12 bg-emerald-900 mx-auto mb-3"></div>
+                    <p class="text-slate-400 text-xs uppercase tracking-widest">Toneladas de CO² Evitadas</p>
+                </div>
+
+                <!-- Recorde Mensal -->
+                <div class="glass-panel p-8 rounded-xl text-center group hover:bg-white/5 transition-all duration-500" data-aos="fade-up" data-aos-delay="300">
+                    <div class="text-4xl mb-4 group-hover:scale-110 transition-transform duration-500">🏆</div>
+                    <div class="text-5xl font-bold text-amber-400 mb-2 font-mono">SET</div>
+                    <div class="h-0.5 w-12 bg-amber-900 mx-auto mb-3"></div>
+                    <p class="text-slate-400 text-xs uppercase tracking-widest">Mês Recorde (1.253 L)</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CHART & GEOGRAPHY SECTION -->
+    <section class="py-24 px-4 bg-slate-900">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                
+                <!-- Main Chart (2/3 width) -->
+                <div class="lg:col-span-2 glass-panel p-8 rounded-2xl" data-aos="fade-right">
+                    <div class="flex justify-between items-end mb-8">
+                        <div>
+                            <h3 class="text-2xl font-bold text-white mb-2">Curva de Evolução Anual</h3>
+                            <p class="text-slate-400 text-sm">Volume mensal em litros (Jan - Dez 2025)</p>
+                        </div>
+                        <div class="text-right hidden md:block">
+                            <span class="text-gold text-3xl font-bold">+258%</span>
+                            <p class="text-xs text-slate-500 uppercase">Crescimento (Jan vs Dez)</p>
+                        </div>
+                    </div>
+                    <div class="relative h-[350px] w-full">
+                        <canvas id="annualChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Donut Chart (1/3 width) -->
+                <div class="glass-panel p-8 rounded-2xl flex flex-col justify-center relative overflow-hidden" data-aos="fade-left">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl">🌍</div>
+                    <h3 class="text-xl font-bold text-white mb-6 z-10">Dominância Territorial</h3>
+                    <div class="relative h-[250px] w-full z-10">
+                        <canvas id="districtChart"></canvas>
+                    </div>
+                    <div class="mt-6 space-y-3 z-10">
+                        <div class="flex justify-between text-sm border-b border-white/5 pb-2">
+                            <span class="text-slate-300">🥇 Inoã</span>
+                            <span class="font-mono text-gold">~42%</span>
+                        </div>
+                        <div class="flex justify-between text-sm border-b border-white/5 pb-2">
+                            <span class="text-slate-300">🥈 Centro</span>
+                            <span class="font-mono text-cyan-400">~38%</span>
+                        </div>
+                        <div class="flex justify-between text-sm pb-2">
+                            <span class="text-slate-300">🥉 Outros</span>
+                            <span class="font-mono text-slate-400">~20%</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- DETAILED TIMELINE (STORYTELLING) -->
+    <section class="py-32 px-4 bg-[#020617] relative">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-24">
+                <span class="text-gold uppercase tracking-[0.2em] text-sm font-bold">Cronologia</span>
+                <h2 class="text-4xl md:text-5xl text-white mt-4">Marcos de uma <span class="serif italic text-slate-500">Gestão Eficiente</span></h2>
+            </div>
+
+            <div class="relative timeline-line">
+                <!-- Jan-Mar -->
+                <div class="relative z-10 mb-16 pl-10 md:w-1/2 md:ml-auto md:pl-16" data-aos="fade-left">
+                    <div class="absolute left-0 md:-left-3 top-1 w-6 h-6 bg-slate-800 border-2 border-slate-600 rounded-full"></div>
+                    <span class="text-slate-500 font-mono text-xs mb-1 block">1º TRIMESTRE</span>
+                    <h3 class="text-lg md:text-2xl font-bold text-white mb-1">A Fundação</h3>
+                    <p class="text-slate-400 leading-relaxed text-sm">Operação sob gestão anterior (FAS). Coleta média de 348L/mês focada em pontos fixos, estabelecendo a base para a futura expansão.</p>
+                </div>
+
+                <!-- Abril -->
+                <div class="relative z-10 mb-16 pl-10 md:w-1/2 md:mr-auto md:pl-0 md:pr-16 text-left md:text-right" data-aos="fade-right">
+                    <div class="absolute left-0 md:left-auto md:-right-3 top-1 w-6 h-6 bg-gold border-2 border-gold rounded-full shadow-[0_0_15px_rgba(212,175,55,0.5)]"></div>
+                    <span class="text-gold font-mono text-xs mb-1 block">ABRIL • O PONTO DE VIRADA</span>
+                    <h3 class="text-lg md:text-2xl font-bold text-white mb-1">Início da Nova Gestão</h3>
+                    <p class="text-slate-400 leading-relaxed text-sm">Raquel Ferreira e Charlimar Ferreira assumem. Implementação de coletas diárias (07/04) e relatórios detalhados. Primeiro evento educativo no condomínio "Recanto Verde".</p>
+                </div>
+
+                <!-- Maio -->
+                <div class="relative z-10 mb-16 pl-10 md:w-1/2 md:ml-auto md:pl-16" data-aos="fade-left">
+                    <div class="absolute left-0 md:-left-3 top-1 w-6 h-6 bg-emerald-500 border-2 border-emerald-400 rounded-full"></div>
+                    <span class="text-emerald-400 font-mono text-xs mb-1 block">MAIO • EXPANSÃO RÁPIDA</span>
+                    <h3 class="text-lg md:text-2xl font-bold text-white mb-1">Crescimento de 300%</h3>
+                    <p class="text-slate-400 leading-relaxed text-sm">Otimização das rotas resulta em salto para 670L. Ação de conscientização estratégica no condomínio "Green Park III" (31/05), abrindo portas para grandes geradores.</p>
+                </div>
+
+                <!-- Julho -->
+                <div class="relative z-10 mb-16 pl-10 md:w-1/2 md:mr-auto md:pl-0 md:pr-16 text-left md:text-right" data-aos="fade-right">
+                    <div class="absolute left-0 md:left-auto md:-right-3 top-1 w-6 h-6 bg-cyan-500 border-2 border-cyan-400 rounded-full"></div>
+                    <span class="text-cyan-400 font-mono text-xs mb-1 block">JULHO • ENGAJAMENTO SOCIAL</span>
+                    <h3 class="text-lg md:text-2xl font-bold text-white mb-1">Parceria Terceira Idade</h3>
+                    <p class="text-slate-400 leading-relaxed text-sm">Inauguração do ponto de coleta na "Casa da Terceira Idade" em Inoã (29/07) e ação cidadã na Praça do Barroco. O programa ganha rosto humano e capilaridade.</p>
+                </div>
+
+                <!-- Agosto-Dez -->
+                <div class="relative z-10 pl-10 md:w-1/2 md:ml-auto md:pl-16" data-aos="fade-left">
+                    <div class="absolute left-0 md:-left-3 top-1 w-6 h-6 bg-purple-500 border-2 border-purple-400 rounded-full"></div>
+                    <span class="text-purple-400 font-mono text-xs mb-1 block">2º SEMESTRE • CONSISTÊNCIA</span>
+                    <h3 class="text-lg md:text-2xl font-bold text-white mb-1">A Era dos 4 Dígitos</h3>
+                    <p class="text-slate-400 leading-relaxed text-sm">Consolidação de Inoã como pólo principal. Quebra da barreira dos 1.000L mensais em Agosto, Setembro e Outubro. Finalização do ano com ações de força-tarefa.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- COMPARISON TABLE (DETAIL) -->
+    <section class="py-24 px-4 bg-slate-900 border-y border-white/5">
+        <div class="max-w-4xl mx-auto">
+            <h3 class="text-center text-2xl font-bold text-white mb-12">Performance Mês a Mês</h3>
+            <div class="glass-panel overflow-hidden rounded-xl">
+                <table class="w-full text-left text-sm text-slate-400">
+                    <thead class="bg-white/5 text-white uppercase font-bold text-xs">
+                        <tr>
+                            <th class="p-4">Mês</th>
+                            <th class="p-4 text-right">Volume (L)</th>
+                            <th class="p-4 hidden md:table-cell">Destaque</th>
+                            <th class="p-4 text-right">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-white/5">
+                        <tr class="hover:bg-white/5 transition cursor-pointer" onclick="window.location.href='index.html?month=janeiro'"><td class="p-4">Jan</td><td class="p-4 text-right font-mono text-white">324,0</td><td class="p-4 hidden md:table-cell">Gestão Anterior</td><td class="p-4 text-right">⏺️</td></tr>
+                        <tr class="hover:bg-white/5 transition cursor-pointer" onclick="window.location.href='index.html?month=fevereiro'"><td class="p-4">Fev</td><td class="p-4 text-right font-mono text-white">342,0</td><td class="p-4 hidden md:table-cell">Gestão Anterior</td><td class="p-4 text-right">⏺️</td></tr>
+                        <tr class="hover:bg-white/5 transition cursor-pointer" onclick="window.location.href='index.html?month=marco'"><td class="p-4">Mar</td><td class="p-4 text-right font-mono text-white">379,8</td><td class="p-4 hidden md:table-cell">Transição</td><td class="p-4 text-right">↗️</td></tr>
+                        <tr class="hover:bg-white/5 transition bg-gold/10 cursor-pointer" onclick="window.location.href='index.html?month=abril'"><td class="p-4 text-gold font-bold">Abr</td><td class="p-4 text-right font-mono text-white font-bold">220,7</td><td class="p-4 hidden md:table-cell text-gold">Início Nova Gestão</td><td class="p-4 text-right">⭐</td></tr>
+                        <tr class="hover:bg-white/5 transition cursor-pointer" onclick="window.location.href='index.html?month=maio'"><td class="p-4">Mai</td><td class="p-4 text-right font-mono text-white">670,7</td><td class="p-4 hidden md:table-cell">Salto de Performance</td><td class="p-4 text-right text-emerald-400">▲</td></tr>
+                        <tr class="hover:bg-white/5 transition cursor-pointer" onclick="window.location.href='index.html?month=junho'"><td class="p-4">Jun</td><td class="p-4 text-right font-mono text-white">702,3</td><td class="p-4 hidden md:table-cell">Evento Green Park II</td><td class="p-4 text-right text-emerald-400">▲</td></tr>
+                        <tr class="hover:bg-white/5 transition cursor-pointer" onclick="window.location.href='index.html?month=julho'"><td class="p-4">Jul</td><td class="p-4 text-right font-mono text-white">602,8</td><td class="p-4 hidden md:table-cell">Parceria Terceira Idade</td><td class="p-4 text-right">⏺️</td></tr>
+                        <tr class="hover:bg-white/5 transition cursor-pointer" onclick="window.location.href='index.html?month=agosto'"><td class="p-4">Ago</td><td class="p-4 text-right font-mono text-white">1.157,7</td><td class="p-4 hidden md:table-cell">Recorde em Inoã</td><td class="p-4 text-right text-emerald-400">▲▲</td></tr>
+                        <tr class="hover:bg-white/5 transition bg-emerald-900/20 cursor-pointer" onclick="window.location.href='index.html?month=setembro'"><td class="p-4 text-emerald-400 font-bold">Set</td><td class="p-4 text-right font-mono text-white font-bold">1.253,1</td><td class="p-4 hidden md:table-cell text-emerald-400">Recorde Anual</td><td class="p-4 text-right text-emerald-400">🏆</td></tr>
+                        <tr class="hover:bg-white/5 transition cursor-pointer" onclick="window.location.href='index.html?month=outubro'"><td class="p-4">Out</td><td class="p-4 text-right font-mono text-white">1.125,7</td><td class="p-4 hidden md:table-cell">Consistência</td><td class="p-4 text-right">⏺️</td></tr>
+                        <tr class="hover:bg-white/5 transition cursor-pointer" onclick="window.location.href='index.html?month=novembro'"><td class="p-4">Nov</td><td class="p-4 text-right font-mono text-white">865,2</td><td class="p-4 hidden md:table-cell">Ajuste Sazonal</td><td class="p-4 text-right text-amber-500">▼</td></tr>
+                        <tr class="hover:bg-white/5 transition cursor-pointer" onclick="window.location.href='index.html?month=dezembro'"><td class="p-4">Dez</td><td class="p-4 text-right font-mono text-white">720,0</td><td class="p-4 hidden md:table-cell">Fechamento Meta Limpa</td><td class="p-4 text-right text-amber-500">▼</td></tr>
+                    </tbody>
+                    <tfoot class="bg-white/10 text-white font-bold">
+                        <tr>
+                            <td class="p-4">TOTAL 2025</td>
+                            <td class="p-4 text-right font-mono text-gold text-lg">8.363,3 L</td>
+                            <td class="p-4 hidden md:table-cell"></td>
+                            <td class="p-4"></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-[#020617] border-t border-white/10">
+        <!-- Seção principal do footer -->
+        <div class="max-w-7xl mx-auto px-4 py-16">
+            <!-- Logo no topo -->
+            <div class="flex justify-center mb-12">
+                <div class="bg-white p-5 rounded-full shadow-2xl">
+                    <img src="Logosanemar.png" alt="Sanemar Logo" class="h-24 w-24 object-contain">
+                </div>
+            </div>
+
+            <!-- Informações da empresa -->
+            <div class="text-center mb-12">
+                <h4 class="text-white font-serif text-2xl mb-3">Sanemar</h4>
+                <p class="text-slate-400 text-base mb-8">Companhia de Saneamento de Maricá</p>
+                
+                <!-- Tags de status -->
+                <div class="flex flex-wrap justify-center gap-3 text-xs text-slate-500 uppercase tracking-widest">
+                    <span class="px-3 py-1 bg-white/5 rounded-full">Relatório Confidencial</span>
+                    <span class="px-3 py-1 bg-white/5 rounded-full">Uso Interno</span>
+                    <span class="px-3 py-1 bg-white/5 rounded-full">2025-2026</span>
+                </div>
+            </div>
+
+            <!-- Botões de navegação -->
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4 mb-12">
+                <a href="index.html" class="group inline-flex items-center gap-3 px-8 py-4 border-2 border-gold text-gold hover:bg-gold hover:text-black transition-all duration-300 rounded-lg font-bold text-sm uppercase tracking-wider w-full sm:w-auto justify-center">
+                    <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                    <span>Relatórios Mensais</span>
+                </a>
+                <a href="#kpis" class="inline-flex items-center gap-3 px-8 py-4 bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white transition-all duration-300 rounded-lg font-bold text-sm uppercase tracking-wider w-full sm:w-auto justify-center">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                    </svg>
+                    <span>Voltar ao Topo</span>
+                </a>
+            </div>
+
+            <!-- Linha separadora -->
+            <div class="border-t border-white/10 pt-8">
+                <p class="text-center text-slate-600 text-sm">
+                    © 2025 Sanemar - Companhia de Saneamento de Maricá. Todos os direitos reservados.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        AOS.init({ once: true, offset: 100 });
+
+        // Accurate Annual Data
+        const annualData = [324.0, 342.0, 379.8, 220.7, 670.7, 702.3, 602.8, 1157.7, 1253.1, 1125.7, 865.2, 720.0];
+        
+        // Counter Logic
+        const counters = document.querySelectorAll('.counter');
+        counters.forEach(counter => {
+            const target = +counter.getAttribute('data-target');
+            const duration = 2500;
+            const increment = target / (duration / 16);
+            let current = 0;
+            const updateCounter = () => {
+                current += increment;
+                if (current < target) {
+                    counter.innerText = Math.ceil(current).toLocaleString('pt-BR');
+                    requestAnimationFrame(updateCounter);
+                } else {
+                    counter.innerText = target.toLocaleString('pt-BR');
+                }
+            };
+            const observer = new IntersectionObserver((entries) => {
+                if(entries[0].isIntersecting) {
+                    updateCounter();
+                    observer.disconnect();
+                }
+            });
+            observer.observe(counter);
+        });
+
+        // Main Chart
+        const ctx = document.getElementById('annualChart').getContext('2d');
+        const gradient = ctx.createLinearGradient(0, 0, 0, 350);
+        gradient.addColorStop(0, 'rgba(212, 175, 55, 0.4)'); // Gold
+        gradient.addColorStop(1, 'rgba(212, 175, 55, 0.0)');
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                datasets: [{
+                    label: 'Volume (Litros)',
+                    data: annualData,
+                    borderColor: '#d4af37',
+                    backgroundColor: gradient,
+                    borderWidth: 3,
+                    pointBackgroundColor: '#020617',
+                    pointBorderColor: '#d4af37',
+                    pointBorderWidth: 2,
+                    pointRadius: 6,
+                    pointHoverRadius: 10,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748b' } },
+                    x: { grid: { display: false }, ticks: { color: '#64748b' } }
+                }
+            }
+        });
+
+        // District Donut Chart
+        const ctxDistrict = document.getElementById('districtChart').getContext('2d');
+        new Chart(ctxDistrict, {
+            type: 'doughnut',
+            data: {
+                labels: ['Inoã', 'Centro', 'Ponta Negra', 'Itaipuaçu', 'Outros'],
+                datasets: [{
+                    data: [3500, 3200, 800, 500, 363], // Estimativa proporcional baseada nos totais mensais
+                    backgroundColor: ['#d4af37', '#22d3ee', '#34d399', '#f472b6', '#94a3b8'],
+                    borderWidth: 0,
+                    hoverOffset: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                cutout: '70%'
+            }
+        });
+    </script>
+</body>
+</html>

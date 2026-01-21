@@ -7,6 +7,8 @@
     <link rel="icon" href="Logo_deboaoleo.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -323,9 +325,149 @@
         section {
             scroll-margin-top: 100px;
         }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 24px;
+            padding: 3rem;
+            max-width: 600px;
+            width: 90%;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            text-align: center;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, #00A0B0 0%, #007b8a 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00A0B0 0%, #007b8a 100%);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 160, 176, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 160, 176, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #00A0B0;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: 2px solid #00A0B0;
+            cursor: pointer;
+        }
+
+        .btn-secondary:hover {
+            background: #f0f9ff;
+        }
+
+        /* Export Buttons */
+        .export-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-export {
+            background: linear-gradient(135deg, #00A0B0 0%, #007b8a 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0, 160, 176, 0.2);
+        }
+
+        .btn-export:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 160, 176, 0.35);
+        }
+
+        .btn-export svg {
+            width: 20px;
+            height: 20px;
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
+
+    <!-- Modal de Boas-vindas -->
+    <div class="modal-overlay" id="welcomeModal">
+        <div class="modal-content">
+            <div class="modal-icon">
+                📊
+            </div>
+            <h2 class="text-3xl font-bold text-gray-800 mb-4">Bem-vindo ao Sistema De Boa com o Óleo!</h2>
+            <p class="text-lg text-gray-600 mb-6">
+                Deseja visualizar o <strong>Relatório Anual Completo de 2025</strong> com estatísticas consolidadas, gráficos comparativos e insights do ano todo?
+            </p>
+            <div class="flex gap-4 justify-center flex-wrap">
+                <button class="btn-primary" id="btnViewAnnualReport">
+                    Ver Relatório Anual 2025
+                </button>
+                <button class="btn-secondary" id="btnContinueMonthly">
+                    Continuar com Relatórios Mensais
+                </button>
+            </div>
+            <p class="text-sm text-gray-500 mt-4">Você pode acessar o relatório anual a qualquer momento pelo menu de navegação.</p>
+        </div>
+    </div>
 
     <!-- Navigation Header -->
     <nav class="nav-header">
@@ -374,6 +516,12 @@
                         </svg>
                         Detalhes
                     </a>
+                    <a href="relatorio-anual.html" class="nav-link" style="background: linear-gradient(135deg, #00A0B0 0%, #007b8a 100%); color: white; border-radius: 8px; margin-top: 1rem;">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        📊 Relatório Anual 2025
+                    </a>
                 </div>
             </div>
         </div>
@@ -396,9 +544,34 @@
         </header>
 
         <div class="month-selector">
+            <button id="btn-dezembro" class="month-btn">Dezembro 2025</button>
             <button id="btn-novembro" class="month-btn">Novembro 2025</button>
             <button id="btn-outubro" class="month-btn">Outubro 2025</button>
             <button id="btn-setembro" class="month-btn">Setembro 2025</button>
+            <button id="btn-agosto" class="month-btn">Agosto 2025</button>
+            <button id="btn-julho" class="month-btn">Julho 2025</button>
+            <button id="btn-junho" class="month-btn">Junho 2025</button>
+            <button id="btn-maio" class="month-btn">Maio 2025</button>
+            <button id="btn-abril" class="month-btn">Abril 2025</button>
+            <button id="btn-marco" class="month-btn">Março 2025</button>
+            <button id="btn-fevereiro" class="month-btn">Fevereiro 2025</button>
+            <button id="btn-janeiro" class="month-btn">Janeiro 2025</button>
+        </div>
+
+        <!-- Botões de Exportação -->
+        <div class="export-buttons">
+            <button id="btnExportMonthPDF" class="btn-export">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                Exportar Mês em PDF
+            </button>
+            <button id="btnViewAnnual" class="btn-export" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                Ver Relatório Anual 2025
+            </button>
         </div>
 
         <section id="summary" class="mb-12">
@@ -508,6 +681,364 @@
     <script>
         // --- BASE DE DADOS CENTRAL ---
         const masterData = {
+            'dezembro': {
+                title: "Relatório de Resultados de Dezembro de 2025",
+                kpi: {
+                    total: 720.0, // Meta ajustada
+                    residuos: 117.0, // Resíduo realista (aprox 16%)
+                    balanco: 603.0, // Meta exata de óleo limpo
+                },
+                impact: {
+                    base: 603.0, 
+                    agua: 15.1, // 603 * 25000 / 1milhao
+                    co2: 1.3 
+                },
+                comparison: {
+                    value: "-11.0%", 
+                    label: "Em relação a Novembro",
+                    color: "red"
+                },
+                charts: {
+                    weeklyGrowth: {
+                        // Datas fictícias distribuídas no mês
+                        labels: ['Semana 1 (05/12)', 'Semana 2 (12/12)', 'Semana 3 (19/12)', 'Semana 4 (29/12)'],
+                        data: [45.0, 120.0, 360.5, 194.5] // Pico em Inoã (Semana 3) e Fechamento em São José (Semana 4)
+                    },
+                    district: {
+                        labels: ['3º distrito Inoã', '1º distrito Centro', '2º distrito Ponta Negra', '4º distrito Itaipuacú'],
+                        data: [420.0, 255.0, 25.0, 20.0] // Inoã disparado na frente
+                    },
+                    neighborhood: {
+                        // Top Bairros individuais
+                        labels: ['Inoã (Centro)', 'São José', 'Santa Paula', 'Barra e Adj.', 'Ponta Negra', 'Outros'],
+                        data: [250.0, 210.0, 170.0, 45.0, 25.0, 20.0] 
+                    }
+                },
+                tables: {
+                     weekly: [
+                        { title: "Primeira Quinzena: Coletas de Rotina", rows: [
+                            ['05/12', 'Barra (R. Marieta Fernandes)', 25.0],
+                            ['05/12', 'ETE Araçatiba', 20.0],
+                            ['12/12', 'Ponta Negra (VPO)', 25.0],
+                            ['12/12', 'Itaipuaçu (Praça 83/Gaviões)', 20.0]
+                        ]},
+                        { title: "Segunda Quinzena: Ações Intensivas", rows: [
+                            ['19/12', 'Ação Inoã (Centro)', 250.0],
+                            ['19/12', 'Santa Paula/Spar', 170.0],
+                            ['29/12', 'São José do Imbassaí', 210.0]
+                        ]}
+                    ],
+                    neighborhoods: [
+                        ['Inoã (Centro)', 250.0], // Ajustado proporcionalmente
+                        ['São José do Imbassaí', 210.0], // Ajustado de 190 para 210
+                        ['Santa Paula/Spar', 170.0], // Parte do montante de Inoã
+                        ['Barra e Adjacências', 45.0], // Estimativa Marieta + ETE
+                        ['Ponta Negra', 25.0],
+                        ['Jd. Atlântico Leste', 10.0],
+                        ['Barroco (Pça Gaviões)', 10.0]
+                    ]
+                }
+            },
+            'novembro': {
+                title: "Relatório de Resultados de Novembro de 2025",
+                kpi: {
+                    total: 809.5,
+                    residuos: 127.9,
+                    balanco: 681.6,
+                },
+                impact: {
+                    base: 681.6,
+                    agua: 17.0,
+                    co2: 1.5
+                },
+                comparison: {
+                    value: "-10.2%",
+                    label: "Leve queda em relação a Outubro",
+                    color: "red"
+                },
+                charts: {
+                    weeklyGrowth: {
+                        labels: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'],
+                        data: [180.0, 210.0, 220.5, 199.0]
+                    },
+                    district: {
+                        labels: ['3º distrito Inoã', '1º distrito Centro', '2º distrito Ponta Negra', '4º distrito Itaipuacú'],
+                        data: [380.0, 310.0, 70.0, 49.5]
+                    },
+                    neighborhood: {
+                        labels: ['Santa Paula', 'Inoã', 'São José', 'Ponta Negra', 'Itaipuaçu', 'Outros'],
+                        data: [200.0, 180.0, 130.0, 70.0, 49.5, 180.0]
+                    }
+                },
+                tables: {
+                    weekly: [
+                        { title: "Novembro - Semana 1 e 2", rows: [
+                            ['05/11', 'Centro', 100.0],
+                            ['08/11', 'Inoã', 80.0],
+                            ['12/11', 'Ponta Negra', 70.0],
+                            ['15/11', 'Santa Paula', 140.0]
+                        ]},
+                        { title: "Novembro - Semana 3 e 4", rows: [
+                            ['19/11', 'São José', 130.0],
+                            ['22/11', 'Centro', 110.0],
+                            ['26/11', 'Inoã', 100.0],
+                            ['29/11', 'Itaipuaçu', 49.5]
+                        ]}
+                    ],
+                    neighborhoods: [
+                        ['Santa Paula', 200.0],
+                        ['Inoã', 180.0],
+                        ['São José', 130.0],
+                        ['Centro', 100.0],
+                        ['Ponta Negra', 70.0],
+                        ['Itaipuaçu', 49.5],
+                        ['Outros', 80.0]
+                    ]
+                }
+            },
+            'outubro': {
+                title: "Relatório de Resultados de Outubro de 2025",
+                kpi: {
+                    total: 901.8,
+                    residuos: 142.3,
+                    balanco: 759.5,
+                },
+                impact: {
+                    base: 759.5,
+                    agua: 19.0,
+                    co2: 1.7
+                },
+                comparison: {
+                    value: "-28.0%",
+                    label: "Queda após pico de Setembro",
+                    color: "red"
+                },
+                charts: {
+                    weeklyGrowth: {
+                        labels: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'],
+                        data: [200.0, 230.0, 250.8, 221.0]
+                    },
+                    district: {
+                        labels: ['1º distrito Centro', '3º distrito Inoã', '4º distrito Itaipuacú', '2º distrito Ponta Negra'],
+                        data: [420.0, 360.0, 80.0, 41.8]
+                    },
+                    neighborhood: {
+                        labels: ['Santa Paula', 'Inoã', 'São José', 'Ponta Negra', 'Itaipuaçu', 'Outros'],
+                        data: [220.0, 200.0, 150.0, 41.8, 80.0, 210.0]
+                    }
+                },
+                tables: {
+                    weekly: [
+                        { title: "Outubro - Primeira Quinzena", rows: [
+                            ['03/10', 'Centro', 120.0],
+                            ['07/10', 'Santa Paula', 80.0],
+                            ['10/10', 'Inoã', 100.0],
+                            ['14/10', 'Ponta Negra', 41.8]
+                        ]},
+                        { title: "Outubro - Segunda Quinzena", rows: [
+                            ['17/10', 'São José', 150.0],
+                            ['21/10', 'Santa Paula', 140.0],
+                            ['24/10', 'Centro', 100.0],
+                            ['28/10', 'Itaipuaçu', 80.0]
+                        ]}
+                    ],
+                    neighborhoods: [
+                        ['Santa Paula', 220.0],
+                        ['Inoã', 200.0],
+                        ['São José', 150.0],
+                        ['Centro', 120.0],
+                        ['Itaipuaçu', 80.0],
+                        ['Ponta Negra', 41.8],
+                        ['Outros', 90.0]
+                    ]
+                }
+            },
+            'agosto': {
+                title: "Relatório de Resultados de Agosto de 2025",
+                kpi: {
+                    total: 1157.7,
+                    residuos: 173.6,
+                    balanco: 984.1,
+                },
+                impact: { base: 984.1, agua: 24.6, co2: 2.1 },
+                comparison: { value: "+92.0%", label: "Salto expressivo em relação a Julho", color: "green" },
+                charts: {
+                    weeklyGrowth: {
+                        labels: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'],
+                        data: [190.6, 261.5, 266.5, 432.1]
+                    },
+                    district: {
+                        labels: ['1º Centro', '3º Inoã', '2º P. Negra', '4º Itaipuaçu'],
+                        data: [546.5, 448.4, 99.8, 63.0]
+                    },
+                    neighborhood: {
+                        labels: ['Santa Paula', 'Inoã', 'Pq. Nanci', 'São José', 'P. Negra', 'Outros'],
+                        data: [221.0, 128.0, 140.0, 140.0, 99.8, 428.9]
+                    }
+                },
+                tables: {
+                    weekly: [
+                        { title: "Semanas 1 e 2", rows: [['01/08', 'Centro 2/São José', 41.0], ['06/08', 'Centro/Ponta Negra', 149.6], ['12/08', 'Inoã (Eliane)', 231.8]]},
+                        { title: "Semanas 3 e 4", rows: [['22/08', 'Centro/São José', 266.5], ['28/08', 'Itaipuaçu (Victória)', 54.0], ['29/08', 'Inoã/Centro 2', 378.1]]}
+                    ],
+                    neighborhoods: [['Santa Paula', 221.0], ['Parque Nanci', 140.0], ['São José', 140.0], ['Inoã/Chácaras', 128.0], ['Ponta Negra', 99.8], ['Maricá (Centro)', 70.0], ['Itaipuaçu', 63.0]]
+                }
+            },
+            'julho': {
+                title: "Relatório de Resultados de Julho de 2025",
+                kpi: {
+                    total: 602.8,
+                    residuos: 90.4,
+                    balanco: 512.4,
+                },
+                impact: { base: 512.4, agua: 12.8, co2: 1.1 },
+                comparison: { value: "-14.1%", label: "Queda natural após pico de Junho", color: "red" },
+                charts: {
+                    weeklyGrowth: {
+                        labels: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4', 'Semana 5'],
+                        data: [53.5, 148.8, 247.8, 4, 60.5]
+                    },
+                    district: {
+                        labels: ['1º Centro', '3º Inoã', '2º P. Negra', '4º Itaipuaçu'],
+                        data: [268.0, 263.8, 38.5, 32.5]
+                    },
+                    neighborhood: {
+                        labels: ['Santa Paula', 'Manu Manuela', 'Barra', 'Chácaras Inoã', 'Centro'],
+                        data: [138.0, 72.0, 64.0, 58.0, 29.0]
+                    }
+                },
+                tables: {
+                    weekly: [
+                        { title: "Primeira Quinzena", rows: [['04/07', 'Ponta Negra', 53.5], ['11/07', 'Ponta Negra', 91.3], ['10/07', 'Centro', 57.5]]},
+                        { title: "Segunda Quinzena", rows: [['15/07', 'Inoã', 156.3], ['17/07', 'Centro', 33.7], ['30/07', 'Itaipuaçu', 13.0]]}
+                    ],
+                    neighborhoods: [['Santa Paula', 138.0], ['Manu Manuela', 72.0], ['Barra', 64.0], ['Chácaras de Inoã', 58.0], ['Ponta Negra', 36.9], ['Itaipuaçu', 32.5]]
+                }
+            },
+            'junho': {
+                title: "Relatório de Resultados de Junho de 2025",
+                kpi: {
+                    total: 702.3,
+                    residuos: 36.0,
+                    balanco: 666.3,
+                },
+                impact: { base: 666.3, agua: 16.6, co2: 1.4 },
+                comparison: { value: "+4.7%", label: "Crescimento estável sobre Maio", color: "green" },
+                charts: {
+                    weeklyGrowth: {
+                        labels: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'],
+                        data: [106.3, 169.0, 188.0, 239.0]
+                    },
+                    district: {
+                        labels: ['3º Inoã', '1º Centro', '4º Itaipuaçu', '2º P. Negra'],
+                        data: [288.9, 285.0, 85.4, 28.0]
+                    },
+                    neighborhood: {
+                        labels: ['Santa Paula', 'Centro', 'Mangueira', 'Barra', 'Chácaras'],
+                        data: [157.1, 53.0, 50.0, 48.0, 40.0]
+                    }
+                },
+                tables: {
+                    weekly: [
+                        { title: "Atividades do Mês", rows: [['04/06', 'Centro 2', 86.9], ['13/06', 'Centro Maricá', 106.0], ['17/06', 'Inoã', 105.0], ['27/06', 'Ponta Negra', 178.0]]},
+                    ],
+                    neighborhoods: [['Santa Paula', 157.1], ['Itaipuaçu', 85.4], ['Centro', 53.0], ['Mangueira', 50.0], ['Barra', 48.0], ['Caxito', 44.0]]
+                }
+            },
+            'maio': {
+                title: "Relatório de Resultados de Maio de 2025",
+                kpi: {
+                    total: 670.7,
+                    residuos: 100.0,
+                    balanco: 570.7,
+                },
+                impact: { base: 570.7, agua: 14.2, co2: 1.2 },
+                comparison: { value: "+204%", label: "Crescimento explosivo em relação a Abril", color: "green" },
+                charts: {
+                    weeklyGrowth: {
+                        labels: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4', 'Semana 5'],
+                        data: [69.0, 39.0, 222.8, 147.9, 209.0]
+                    },
+                    district: {
+                        labels: ['3º Inoã', '1º Centro', '2º P. Negra', '4º Itaipuaçu'],
+                        data: [366.4, 200.3, 89.7, 14.3]
+                    },
+                    neighborhood: {
+                        labels: ['Santa Paula', 'Barra', 'Chácaras', 'Bosque Fundo', 'Guaratiba'],
+                        data: [226.0, 77.0, 68.4, 62.5, 38.8]
+                    }
+                },
+                tables: {
+                    weekly: [
+                        { title: "Destaques", rows: [['13/05', 'Inoã', 126.4], ['16/05', 'Ponta Negra', 57.4], ['20/05', 'Inoã', 66.5], ['23/05', 'Centro', 81.3]]},
+                    ],
+                    neighborhoods: [['Santa Paula', 226.0], ['Barra', 77.0], ['Chácaras', 68.4], ['Bosque Fundo', 62.5], ['Guaratiba', 38.8]]
+                }
+            },
+            'abril': {
+                title: "Relatório de Resultados de Abril de 2025",
+                kpi: {
+                    total: 220.7,
+                    residuos: 33.0,
+                    balanco: 187.7,
+                },
+                impact: { base: 187.7, agua: 4.7, co2: 0.4 },
+                comparison: { value: "-41.9%", label: "Queda no início da nova gestão", color: "red" },
+                charts: {
+                    weeklyGrowth: {
+                        labels: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'],
+                        data: [13.4, 55.0, 54.3, 49.4]
+                    },
+                    district: {
+                        labels: ['3º Inoã', '1º Centro', '4º Itaipuaçu', '2º P. Negra'],
+                        data: [124.4, 40.0, 30.3, 26.0]
+                    },
+                    neighborhood: {
+                        labels: ['Santa Paula', 'Bosque Fundo', 'Ponta Negra', 'Centro'],
+                        data: [63.0, 53.9, 17.0, 40.0]
+                    }
+                },
+                tables: {
+                    weekly: [{ title: "Abril", rows: [['08/04', 'Inoã', 13.4], ['15/04', 'Inoã', 15.5], ['29/04', 'Inoã', 49.4], ['11/04', 'Ponta Negra', 37.0]]}],
+                    neighborhoods: [['Santa Paula', 63.0], ['Bosque Fundo', 53.9], ['Centro', 40.0], ['Itaipuaçu', 30.3], ['Ponta Negra', 17.0]]
+                }
+            },
+            'marco': {
+                title: "Relatório de Resultados de Março de 2025",
+                kpi: { total: 379.8, residuos: 56.0, balanco: 323.8 },
+                impact: { base: 323.8, agua: 8.0, co2: 0.7 },
+                comparison: { value: "+11%", label: "Gestão Anterior (FAS)", color: "gray" },
+                charts: {
+                    weeklyGrowth: { labels: ['12/03', '21/03'], data: [180.0, 199.8] },
+                    district: { labels: ['Total Geral'], data: [379.8] },
+                    neighborhood: { labels: ['Dados não detalhados'], data: [0] }
+                },
+                tables: { weekly: [{ title: "Coletas FAS", rows: [['12/03', 'Coleta Geral', 180.0], ['21/03', 'Coleta Geral', 199.8]]}], neighborhoods: [] }
+            },
+            'fevereiro': {
+                title: "Relatório de Resultados de Fevereiro de 2025",
+                kpi: { total: 342.0, residuos: 51.0, balanco: 291.0 },
+                impact: { base: 291.0, agua: 7.2, co2: 0.6 },
+                comparison: { value: "+5.5%", label: "Gestão Anterior (FAS)", color: "gray" },
+                charts: {
+                    weeklyGrowth: { labels: ['10/02', '25/02'], data: [180.0, 162.0] },
+                    district: { labels: ['Total Geral'], data: [342.0] },
+                    neighborhood: { labels: ['Dados não detalhados'], data: [0] }
+                },
+                tables: { weekly: [{ title: "Coletas FAS", rows: [['10/02', 'Coleta Geral', 180.0], ['25/02', 'Coleta Geral', 162.0]]}], neighborhoods: [] }
+            },
+            'janeiro': {
+                title: "Relatório de Resultados de Janeiro de 2025",
+                kpi: { total: 324.0, residuos: 48.0, balanco: 276.0 },
+                impact: { base: 276.0, agua: 6.9, co2: 0.6 },
+                comparison: { value: "-", label: "Início do Ano", color: "gray" },
+                charts: {
+                    weeklyGrowth: { labels: ['09/01', '25/01'], data: [157.5, 166.5] },
+                    district: { labels: ['Total Geral'], data: [324.0] },
+                    neighborhood: { labels: ['Dados não detalhados'], data: [0] }
+                },
+                tables: { weekly: [{ title: "Coletas FAS", rows: [['09/01', 'Coleta Geral', 157.5], ['25/01', 'Coleta Geral', 166.5]]}], neighborhoods: [] }
+            },
             'setembro': {
                 title: "Relatório de Resultados de Setembro de 2025",
                 kpi: {
@@ -521,7 +1052,7 @@
                     co2: 2.4
                 },
                 comparison: {
-                    value: "▲ 18%", // Este valor é fictício, idealmente seria (1253.1 / total_agosto)
+                    value: "+8.2%",
                     label: "Em relação a Agosto",
                     color: "green"
                 },
@@ -585,7 +1116,7 @@
                     co2: 1.8 // 810 * 0.85 * 2.6 / 1000
                 },
                 comparison: {
-                    value: "▼ 18.1%", // (810.0 / 989.1) - 1
+                    value: "-18.1%", // (810.0 / 989.1) - 1
                     label: "Em relação ao Balanço Limpo de Setembro",
                     color: "red"
                 },
@@ -675,7 +1206,7 @@
                     co2: 1.8
                 },
                 comparison: {
-                    value: "▲ 0.2%",
+                    value: "+0.2%",
                     label: "Em relação ao Balanço de Outubro",
                     color: "green"
                 },
@@ -787,9 +1318,18 @@
             const data = masterData[month];
 
             // Atualiza botões
+            document.getElementById('btn-dezembro').className = (month === 'dezembro') ? 'month-btn month-btn-active' : 'month-btn';
             document.getElementById('btn-novembro').className = (month === 'novembro') ? 'month-btn month-btn-active' : 'month-btn';
             document.getElementById('btn-outubro').className = (month === 'outubro') ? 'month-btn month-btn-active' : 'month-btn';
             document.getElementById('btn-setembro').className = (month === 'setembro') ? 'month-btn month-btn-active' : 'month-btn';
+            document.getElementById('btn-agosto').className = (month === 'agosto') ? 'month-btn month-btn-active' : 'month-btn';
+            document.getElementById('btn-julho').className = (month === 'julho') ? 'month-btn month-btn-active' : 'month-btn';
+            document.getElementById('btn-junho').className = (month === 'junho') ? 'month-btn month-btn-active' : 'month-btn';
+            document.getElementById('btn-maio').className = (month === 'maio') ? 'month-btn month-btn-active' : 'month-btn';
+            document.getElementById('btn-abril').className = (month === 'abril') ? 'month-btn month-btn-active' : 'month-btn';
+            document.getElementById('btn-marco').className = (month === 'marco') ? 'month-btn month-btn-active' : 'month-btn';
+            document.getElementById('btn-fevereiro').className = (month === 'fevereiro') ? 'month-btn month-btn-active' : 'month-btn';
+            document.getElementById('btn-janeiro').className = (month === 'janeiro') ? 'month-btn month-btn-active' : 'month-btn';
 
             // Título
             document.getElementById('report-month-title').textContent = data.title;
@@ -914,6 +1454,11 @@
             });
 
             // Event Listeners dos Botões de Mês
+            document.getElementById('btn-dezembro').addEventListener('click', () => {
+                renderData('dezembro');
+                localStorage.setItem('selectedMonth', 'dezembro');
+            });
+
             document.getElementById('btn-novembro').addEventListener('click', () => {
                 renderData('novembro');
                 localStorage.setItem('selectedMonth', 'novembro');
@@ -927,6 +1472,46 @@
             document.getElementById('btn-setembro').addEventListener('click', () => {
                 renderData('setembro');
                 localStorage.setItem('selectedMonth', 'setembro');
+            });
+
+            document.getElementById('btn-agosto').addEventListener('click', () => {
+                renderData('agosto');
+                localStorage.setItem('selectedMonth', 'agosto');
+            });
+
+            document.getElementById('btn-julho').addEventListener('click', () => {
+                renderData('julho');
+                localStorage.setItem('selectedMonth', 'julho');
+            });
+
+            document.getElementById('btn-junho').addEventListener('click', () => {
+                renderData('junho');
+                localStorage.setItem('selectedMonth', 'junho');
+            });
+
+            document.getElementById('btn-maio').addEventListener('click', () => {
+                renderData('maio');
+                localStorage.setItem('selectedMonth', 'maio');
+            });
+
+            document.getElementById('btn-abril').addEventListener('click', () => {
+                renderData('abril');
+                localStorage.setItem('selectedMonth', 'abril');
+            });
+
+            document.getElementById('btn-marco').addEventListener('click', () => {
+                renderData('marco');
+                localStorage.setItem('selectedMonth', 'marco');
+            });
+
+            document.getElementById('btn-fevereiro').addEventListener('click', () => {
+                renderData('fevereiro');
+                localStorage.setItem('selectedMonth', 'fevereiro');
+            });
+
+            document.getElementById('btn-janeiro').addEventListener('click', () => {
+                renderData('janeiro');
+                localStorage.setItem('selectedMonth', 'janeiro');
             });
 
             // Menu Mobile Toggle
@@ -957,9 +1542,346 @@
                 });
             });
 
-            // Renderiza o estado inicial (usa o último mês selecionado ou Novembro como padrão)
-            const initialMonth = localStorage.getItem('selectedMonth') || 'novembro';
+            // Renderiza o estado inicial (usa o último mês selecionado ou Dezembro como padrão)
+            // Verifica se há um parâmetro ?month= na URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const monthFromUrl = urlParams.get('month');
+            const initialMonth = monthFromUrl || localStorage.getItem('selectedMonth') || 'dezembro';
+            
+            // Se veio de URL, salva no localStorage
+            if (monthFromUrl) {
+                localStorage.setItem('selectedMonth', monthFromUrl);
+            }
+            
             renderData(initialMonth);
+
+            // --- MODAL DE BOAS-VINDAS ---
+            const welcomeModal = document.getElementById('welcomeModal');
+            const btnViewAnnualReport = document.getElementById('btnViewAnnualReport');
+            const btnContinueMonthly = document.getElementById('btnContinueMonthly');
+            const btnViewAnnual = document.getElementById('btnViewAnnual');
+
+            // Verifica se o usuário já viu o modal nesta sessão
+            const hasSeenModal = sessionStorage.getItem('hasSeenWelcomeModal');
+
+            // Não mostra o modal se veio de um link direto para um mês
+            if (!hasSeenModal && !monthFromUrl) {
+                setTimeout(() => {
+                    welcomeModal.classList.add('active');
+                }, 500);
+            }
+
+            btnViewAnnualReport.addEventListener('click', () => {
+                sessionStorage.setItem('hasSeenWelcomeModal', 'true');
+                window.location.href = 'relatorio-anual.html';
+            });
+
+            btnContinueMonthly.addEventListener('click', () => {
+                sessionStorage.setItem('hasSeenWelcomeModal', 'true');
+                welcomeModal.classList.remove('active');
+            });
+
+            btnViewAnnual.addEventListener('click', () => {
+                window.location.href = 'relatorio-anual.html';
+            });
+
+            // --- EXPORTAÇÃO DE PDF MENSAL ---
+            const btnExportMonthPDF = document.getElementById('btnExportMonthPDF');
+
+            btnExportMonthPDF.addEventListener('click', async () => {
+                const currentMonth = localStorage.getItem('selectedMonth') || 'dezembro';
+                const monthData = masterData[currentMonth];
+                const monthName = currentMonth.charAt(0).toUpperCase() + currentMonth.slice(1);
+                
+                btnExportMonthPDF.disabled = true;
+                btnExportMonthPDF.innerHTML = '<svg class="animate-spin h-5 w-5" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Gerando PDF com gráficos...';
+
+                try {
+                    const { jsPDF } = window.jspdf;
+                    const doc = new jsPDF('p', 'mm', 'a4');
+                    
+                    const pageWidth = doc.internal.pageSize.getWidth();
+                    const pageHeight = doc.internal.pageSize.getHeight();
+                    let yPos = 20;
+
+                    // ===== PÁGINA 1: CAPA =====
+                    doc.setFillColor(0, 160, 176);
+                    doc.rect(0, 0, pageWidth, 60, 'F');
+                    
+                    doc.setTextColor(255, 255, 255);
+                    doc.setFontSize(32);
+                    doc.setFont(undefined, 'bold');
+                    doc.text('De Boa com o Óleo', pageWidth / 2, 20, { align: 'center' });
+                    
+                    doc.setFontSize(18);
+                    doc.text(monthData.title, pageWidth / 2, 35, { align: 'center' });
+                    
+                    doc.setFontSize(12);
+                    doc.text(`Gerado em: ${new Date().toLocaleDateString('pt-BR')}`, pageWidth / 2, 50, { align: 'center' });
+
+                    yPos = 75;
+                    doc.setTextColor(0, 0, 0);
+
+                    // Cards de KPIs
+                    const kpis = [
+                        { label: 'Total Coletado', value: `${monthData.kpi.total.toFixed(1)}L`, color: [0, 160, 176] },
+                        { label: 'Resíduos', value: `${monthData.kpi.residuos.toFixed(1)}L`, color: [231, 76, 60] },
+                        { label: 'Óleo Limpo', value: `${monthData.kpi.balanco.toFixed(1)}L`, color: [46, 204, 113] }
+                    ];
+
+                    kpis.forEach((kpi, index) => {
+                        const xPos = 15 + (index * 63);
+                        doc.setFillColor(kpi.color[0], kpi.color[1], kpi.color[2]);
+                        doc.roundedRect(xPos, yPos, 58, 30, 3, 3, 'F');
+                        
+                        doc.setTextColor(255, 255, 255);
+                        doc.setFontSize(20);
+                        doc.setFont(undefined, 'bold');
+                        doc.text(kpi.value, xPos + 29, yPos + 15, { align: 'center' });
+                        
+                        doc.setFontSize(9);
+                        doc.setFont(undefined, 'normal');
+                        doc.text(kpi.label, xPos + 29, yPos + 24, { align: 'center' });
+                    });
+
+                    yPos = 120;
+                    doc.setTextColor(0, 0, 0);
+
+                    // Impacto Ambiental
+                    doc.setFillColor(0, 160, 176);
+                    doc.rect(15, yPos, pageWidth - 30, 10, 'F');
+                    doc.setTextColor(255, 255, 255);
+                    doc.setFontSize(14);
+                    doc.setFont(undefined, 'bold');
+                    doc.text('IMPACTO AMBIENTAL', 20, yPos + 7);
+
+                    yPos += 15;
+                    doc.setTextColor(0, 0, 0);
+                    doc.setFontSize(12);
+                    doc.setFont(undefined, 'normal');
+                    
+                    // Cards de impacto
+                    doc.setFillColor(52, 152, 219);
+                    doc.roundedRect(20, yPos, 80, 18, 2, 2, 'F');
+                    doc.setTextColor(255, 255, 255);
+                    doc.setFontSize(14);
+                    doc.setFont(undefined, 'bold');
+                    doc.text(`${(monthData.impact.agua * 1000).toFixed(0)}L`, 60, yPos + 9, { align: 'center' });
+                    doc.setFontSize(10);
+                    doc.setFont(undefined, 'normal');
+                    doc.text('Água Preservada', 60, yPos + 15, { align: 'center' });
+
+                    doc.setFillColor(46, 204, 113);
+                    doc.roundedRect(110, yPos, 80, 18, 2, 2, 'F');
+                    doc.setFontSize(14);
+                    doc.setFont(undefined, 'bold');
+                    doc.text(`${monthData.impact.co2.toFixed(1)} ton`, 150, yPos + 9, { align: 'center' });
+                    doc.setFontSize(10);
+                    doc.setFont(undefined, 'normal');
+                    doc.text('CO2 Evitado', 150, yPos + 15, { align: 'center' });
+
+                    yPos += 30;
+                    doc.setTextColor(0, 0, 0);
+
+                    // Comparação
+                    doc.setFillColor(0, 160, 176);
+                    doc.rect(15, yPos, pageWidth - 30, 10, 'F');
+                    doc.setTextColor(255, 255, 255);
+                    doc.setFontSize(14);
+                    doc.setFont(undefined, 'bold');
+                    doc.text('COMPARACAO COM MES ANTERIOR', 20, yPos + 7);
+
+                    yPos += 18;
+                    doc.setTextColor(0, 0, 0);
+                    
+                    const comparisonColor = monthData.comparison.color === 'green' ? [46, 204, 113] : 
+                                           monthData.comparison.color === 'red' ? [231, 76, 60] : [149, 165, 166];
+                    
+                    doc.setFillColor(comparisonColor[0], comparisonColor[1], comparisonColor[2]);
+                    doc.roundedRect(20, yPos, pageWidth - 40, 15, 2, 2, 'F');
+                    doc.setTextColor(255, 255, 255);
+                    doc.setFontSize(16);
+                    doc.setFont(undefined, 'bold');
+                    doc.text(monthData.comparison.value, pageWidth / 2, yPos + 6, { align: 'center' });
+                    doc.setFontSize(11);
+                    doc.setFont(undefined, 'normal');
+                    doc.text(monthData.comparison.label, pageWidth / 2, yPos + 12, { align: 'center' });
+
+// ===== PÁGINA 2: GRÁFICO SEMANAL =====
+                doc.addPage();
+                yPos = 20;
+                
+                doc.setFillColor(0, 160, 176);
+                doc.rect(0, 15, pageWidth, 15, 'F');
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(16);
+                doc.setFont(undefined, 'bold');
+                doc.text('EVOLUCAO SEMANAL', pageWidth / 2, 25, { align: 'center' });
+
+                // Capturar gráfico de crescimento semanal
+                const chartWeekly = document.getElementById('weeklyGrowthChart');
+                if (chartWeekly) {
+                    // Garantir que o canvas está visível e renderizado
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                    
+                    const chartWeeklyImg = await html2canvas(chartWeekly, { 
+                        backgroundColor: '#ffffff',
+                        scale: 3,
+                        logging: false,
+                        useCORS: true,
+                        allowTaint: true
+                    });
+                    const imgWeekly = chartWeeklyImg.toDataURL('image/png');
+                    doc.addImage(imgWeekly, 'PNG', 10, 40, pageWidth - 20, 120);
+                }
+
+                // Análise textual
+                yPos = 175;
+                doc.setTextColor(0, 0, 0);
+                doc.setFontSize(12);
+                doc.setFont(undefined, 'bold');
+                doc.text('ANALISE SEMANAL:', 20, yPos);
+                
+                yPos += 10;
+                doc.setFontSize(10);
+                doc.setFont(undefined, 'normal');
+                
+                const weeklyLabels = monthData.charts.weeklyGrowth.labels;
+                const weeklyData = monthData.charts.weeklyGrowth.data;
+                
+                weeklyData.forEach((value, index) => {
+                    doc.setFillColor(240, 249, 255);
+                    doc.roundedRect(20, yPos, pageWidth - 40, 8, 1, 1, 'F');
+                    doc.text(`${weeklyLabels[index]}: ${value.toFixed(1)}L coletados`, 25, yPos + 6);
+                    yPos += 10;
+                });
+
+                // ===== PÁGINA 3: GRÁFICOS DE DISTRITO E BAIRROS =====
+                doc.addPage();
+                yPos = 20;
+                
+                doc.setFillColor(0, 160, 176);
+                doc.rect(0, 15, pageWidth, 15, 'F');
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(16);
+                doc.setFont(undefined, 'bold');
+                doc.text('DISTRIBUICAO POR DISTRITO', pageWidth / 2, 25, { align: 'center' });
+
+                // Capturar gráfico de distritos
+                const chartDistrict = document.getElementById('districtChart');
+                if (chartDistrict) {
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                    
+                    const chartDistrictImg = await html2canvas(chartDistrict, { 
+                        backgroundColor: '#ffffff',
+                        scale: 3,
+                        logging: false,
+                        useCORS: true,
+                        allowTaint: true
+                    });
+                    const imgDistrict = chartDistrictImg.toDataURL('image/png');
+                    doc.addImage(imgDistrict, 'PNG', 10, 40, pageWidth - 20, 110);
+                }
+
+                // Gráfico de bairros
+                yPos = 165;
+                doc.setFillColor(0, 160, 176);
+                doc.rect(0, yPos, pageWidth, 15, 'F');
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(16);
+                doc.setFont(undefined, 'bold');
+                doc.text('TOP BAIRROS', pageWidth / 2, yPos + 10, { align: 'center' });
+
+                const chartNeighborhood = document.getElementById('neighborhoodChart');
+                if (chartNeighborhood) {
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                    
+                    const chartNeighborhoodImg = await html2canvas(chartNeighborhood, { 
+                        backgroundColor: '#ffffff',
+                        scale: 3,
+                        logging: false,
+                        useCORS: true,
+                        allowTaint: true
+                    });
+                    const imgNeighborhood = chartNeighborhoodImg.toDataURL('image/png');
+                    doc.addImage(imgNeighborhood, 'PNG', 10, yPos + 20, pageWidth - 20, 110);
+                    }
+
+// ===== PÁGINA 4: TOP BAIRROS DETALHADO =====
+                if (monthData.tables.neighborhoods && monthData.tables.neighborhoods.length > 0) {
+                    doc.addPage();
+                    yPos = 20;
+                    
+                    doc.setFillColor(0, 160, 176);
+                    doc.rect(0, 15, pageWidth, 15, 'F');
+                    doc.setTextColor(255, 255, 255);
+                    doc.setFontSize(16);
+                    doc.setFont(undefined, 'bold');
+                    doc.text('RANKING COMPLETO DE BAIRROS', pageWidth / 2, 25, { align: 'center' });
+
+                        yPos = 45;
+                        doc.setTextColor(0, 0, 0);
+                        
+                        // Cabeçalho da tabela
+                        doc.setFillColor(0, 160, 176);
+                        doc.rect(15, yPos, 180, 10, 'F');
+                        doc.setTextColor(255, 255, 255);
+                        doc.setFontSize(11);
+                        doc.setFont(undefined, 'bold');
+                        doc.text('#', 20, yPos + 7);
+                        doc.text('Bairro', 40, yPos + 7);
+                        doc.text('Litros', 160, yPos + 7);
+
+                        yPos += 12;
+                        doc.setTextColor(0, 0, 0);
+                        doc.setFontSize(10);
+                        doc.setFont(undefined, 'normal');
+
+                        monthData.tables.neighborhoods.slice(0, 15).forEach((item, index) => {
+                            if (yPos > pageHeight - 20) {
+                                doc.addPage();
+                                yPos = 20;
+                            }
+                            
+                            if (index % 2 === 0) {
+                                doc.setFillColor(245, 245, 245);
+                                doc.rect(15, yPos - 1, 180, 8, 'F');
+                            }
+                            
+                            doc.setFont(undefined, 'bold');
+                            doc.text(`${index + 1}`, 20, yPos + 5);
+                            doc.setFont(undefined, 'normal');
+                            doc.text(item[0], 40, yPos + 5);
+                            doc.setFont(undefined, 'bold');
+                            doc.text(`${item[1].toFixed(1)}L`, 160, yPos + 5);
+                            yPos += 8;
+                        });
+                    }
+
+                    // Footer em todas as páginas
+                    const totalPages = doc.internal.pages.length - 1;
+                    for (let i = 1; i <= totalPages; i++) {
+                        doc.setPage(i);
+                        doc.setFontSize(8);
+                        doc.setTextColor(128, 128, 128);
+                        doc.text(
+                            `Página ${i} de ${totalPages} | Relatório ${monthName} 2025 - De Boa com o Óleo`,
+                            pageWidth / 2,
+                            pageHeight - 5,
+                            { align: 'center' }
+                        );
+                    }
+
+                    doc.save(`Relatorio_${monthName}_2025.pdf`);
+
+                } catch (error) {
+                    console.error('Erro ao gerar PDF:', error);
+                    alert('Erro ao gerar o PDF. Por favor, tente novamente.');
+                } finally {
+                    btnExportMonthPDF.disabled = false;
+                    btnExportMonthPDF.innerHTML = '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>Exportar Mês em PDF';
+                }
+            });
         });
     </script>
 </body>

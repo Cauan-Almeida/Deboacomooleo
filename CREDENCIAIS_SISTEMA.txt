@@ -1,0 +1,105 @@
+# 🔐 CREDENCIAIS DO SISTEMA - CONFIDENCIAL
+
+**⚠️ MANTENHA ESTE ARQUIVO EM LOCAL SEGURO - NÃO COMPARTILHE**
+
+---
+
+## Credenciais de Acesso
+
+### Usuário 1 (Administrador)
+- **Usuário:** `admin`
+- **Senha:** `password`
+- ⚠️ **AÇÃO NECESSÁRIA:** Alterar esta senha imediatamente
+
+### Usuário 2 (Sanemar)
+- **Usuário:** `sanemar`
+- **Senha:** `sanemar2025`
+- ⚠️ **AÇÃO NECESSÁRIA:** Alterar esta senha para uso em produção
+
+---
+
+## Como Alterar as Senhas
+
+### Passo 1: Gerar Hash da Nova Senha
+
+1. Abra o navegador e vá em Ferramentas de Desenvolvedor (F12)
+2. Vá na aba "Console"
+3. Cole o seguinte código:
+
+```javascript
+async function hashPassword(password) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return hashHex;
+}
+
+// Substitua 'MinhaNovaSenh@Segura123' pela senha desejada
+hashPassword('MinhaNovaSenh@Segura123').then(hash => {
+    console.log('Hash da senha:', hash);
+});
+```
+
+4. Pressione Enter e copie o hash gerado
+
+### Passo 2: Atualizar o Arquivo login.html
+
+1. Abra o arquivo `login.html`
+2. Procure pela seção `validUsers`
+3. Substitua o hash antigo pelo novo:
+
+```javascript
+const validUsers = {
+    'admin': 'SEU_NOVO_HASH_AQUI',
+    'sanemar': 'SEU_NOVO_HASH_AQUI',
+};
+```
+
+4. Salve o arquivo
+
+---
+
+## Recomendações de Senha Segura
+
+✅ Mínimo 12 caracteres
+✅ Combine letras maiúsculas e minúsculas
+✅ Inclua números
+✅ Inclua símbolos especiais (@, !, #, $, etc.)
+✅ Não use palavras comuns
+✅ Não use informações pessoais
+✅ Use uma senha diferente para cada usuário
+
+**Exemplos de senhas fortes:**
+- `S@nem4r#2025!Seg`
+- `DeBo@c0m0Ole0*25`
+- `Admin!Forte#2025$`
+
+---
+
+## Backup deste Documento
+
+1. ✅ Anote as senhas em local físico seguro
+2. ✅ Use um gerenciador de senhas (LastPass, 1Password, Bitwarden)
+3. ✅ NÃO salve em arquivo de texto no computador
+4. ✅ NÃO envie por email ou mensagem
+
+---
+
+## Em Caso de Comprometimento
+
+Se suspeitar que as credenciais foram comprometidas:
+
+1. **IMEDIATAMENTE** altere todas as senhas
+2. Gere novos hashes conforme instruções acima
+3. Notifique todos os usuários autorizados
+4. Revise logs de acesso (se disponível)
+
+---
+
+**Data de Criação:** Dezembro 2025
+**Última Atualização:** Dezembro 2025
+**Responsável:** Administrador do Sistema
+
+⚠️ **DESTRUA ESTE ARQUIVO APÓS ALTERAR AS SENHAS PADRÃO**

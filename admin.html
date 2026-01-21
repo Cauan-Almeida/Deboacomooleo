@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Admin | De Boa Com o Óleo</title>
+    <link rel="icon" href="Logo_deboaoleo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            background: linear-gradient(180deg, #00A0B0 0%, #007b8a 100%);
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sidebar-item {
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+        }
+        
+        .sidebar-item:hover,
+        .sidebar-item.active {
+            background: rgba(255, 255, 255, 0.15);
+            border-left-color: white;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        }
+        
+        .action-btn {
+            transition: all 0.3s;
+        }
+        
+        .action-btn:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <aside class="sidebar w-64 flex-shrink-0 hidden md:block">
+            <div class="p-6">
+                <div class="flex items-center gap-3 mb-8">
+                    <img src="Logo_deboaoleo.png" alt="Logo" class="h-12 w-12" onerror="this.onerror=null;this.src='https://placehold.co/50x50/FFFFFF/00A0B0?text=Logo';">
+                    <div>
+                        <h2 class="text-white font-bold text-lg">Admin Panel</h2>
+                        <p class="text-white/70 text-xs">De Boa com o Óleo</p>
+                    </div>
+                </div>
+
+                <nav class="space-y-2">
+                    <a href="#dashboard" class="sidebar-item active flex items-center gap-3 px-4 py-3 text-white rounded-lg">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                        </svg>
+                        Dashboard
+                    </a>
+
+                    <a href="#adicionar" class="sidebar-item flex items-center gap-3 px-4 py-3 text-white rounded-lg">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                        Adicionar Coleta
+                    </a>
+
+                    <a href="#relatorios" class="sidebar-item flex items-center gap-3 px-4 py-3 text-white rounded-lg">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        Relatórios
+                    </a>
+
+                    <a href="#configuracoes" class="sidebar-item flex items-center gap-3 px-4 py-3 text-white rounded-lg">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        Configurações
+                    </a>
+                </nav>
+
+                <div class="mt-auto pt-8">
+                    <a href="index.html" class="sidebar-item flex items-center gap-3 px-4 py-3 text-white rounded-lg">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                        </svg>
+                        Ver Site Público
+                    </a>
+                    
+                    <button onclick="logout()" class="sidebar-item w-full flex items-center gap-3 px-4 py-3 text-white rounded-lg mt-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                        </svg>
+                        Sair
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 overflow-y-auto">
+            <!-- Header -->
+            <header class="bg-white shadow-sm sticky top-0 z-10">
+                <div class="px-6 py-4 flex justify-between items-center">
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-800">Painel Administrativo</h1>
+                        <p class="text-gray-600 text-sm">Bem-vindo, <span id="adminName" class="font-semibold">Admin</span></p>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <button class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                            <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content -->
+            <main class="p-6">
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="stat-card p-6 border-l-4 border-[#00A0B0]">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-sm font-semibold text-gray-600 uppercase">Coletas Este Mês</h3>
+                            <span class="text-2xl">📊</span>
+                        </div>
+                        <p class="text-3xl font-bold text-gray-800">865,2 L</p>
+                        <p class="text-sm text-gray-500 mt-1">Novembro 2025</p>
+                    </div>
+
+                    <div class="stat-card p-6 border-l-4 border-[#10b981]">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-sm font-semibold text-gray-600 uppercase">Óleo Limpo</h3>
+                            <span class="text-2xl">✅</span>
+                        </div>
+                        <p class="text-3xl font-bold text-gray-800">810,2 L</p>
+                        <p class="text-sm text-gray-500 mt-1">93,6% do total</p>
+                    </div>
+
+                    <div class="stat-card p-6 border-l-4 border-[#f59e0b]">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-sm font-semibold text-gray-600 uppercase">Bairros Ativos</h3>
+                            <span class="text-2xl">📍</span>
+                        </div>
+                        <p class="text-3xl font-bold text-gray-800">18</p>
+                        <p class="text-sm text-gray-500 mt-1">Este mês</p>
+                    </div>
+
+                    <div class="stat-card p-6 border-l-4 border-[#ef4444]">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-sm font-semibold text-gray-600 uppercase">Total Anual</h3>
+                            <span class="text-2xl">🎯</span>
+                        </div>
+                        <p class="text-3xl font-bold text-gray-800">3.244,0 L</p>
+                        <p class="text-sm text-gray-500 mt-1">2025</p>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+                    <h2 class="text-xl font-bold text-gray-800 mb-6">Ações Rápidas</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <button class="action-btn flex items-center gap-3 p-4 bg-gradient-to-r from-[#00A0B0] to-[#007b8a] text-white rounded-lg shadow-md hover:shadow-lg">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                            </svg>
+                            <div class="text-left">
+                                <h3 class="font-semibold">Nova Coleta</h3>
+                                <p class="text-xs opacity-90">Registrar nova coleta</p>
+                            </div>
+                        </button>
+
+                        <button class="action-btn flex items-center gap-3 p-4 bg-gradient-to-r from-[#10b981] to-[#059669] text-white rounded-lg shadow-md hover:shadow-lg">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            <div class="text-left">
+                                <h3 class="font-semibold">Gerar Relatório</h3>
+                                <p class="text-xs opacity-90">Exportar dados</p>
+                            </div>
+                        </button>
+
+                        <button onclick="window.location.href='historico.html'" class="action-btn flex items-center gap-3 p-4 bg-gradient-to-r from-[#6366f1] to-[#4f46e5] text-white rounded-lg shadow-md hover:shadow-lg">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <div class="text-left">
+                                <h3 class="font-semibold">Histórico</h3>
+                                <p class="text-xs opacity-90">Ver dados anteriores</p>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Recent Activities -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-6">Últimas Coletas Registradas</h2>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                            <div class="w-12 h-12 bg-[#00A0B0] rounded-full flex items-center justify-center text-white font-bold text-xs">
+                                207L
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-semibold text-gray-800">Santa Paula/Cassorotiba - Eliane</h4>
+                                <p class="text-sm text-gray-600">28/11/2025 - Quinta-feira</p>
+                            </div>
+                            <span class="text-sm font-semibold text-gray-500">207,1 L</span>
+                        </div>
+
+                        <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                            <div class="w-12 h-12 bg-[#00A0B0] rounded-full flex items-center justify-center text-white font-bold text-xs">
+                                178L
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-semibold text-gray-800">Barra/Zacarias/Boqueirão - Viviane</h4>
+                                <p class="text-sm text-gray-600">26/11/2025 - Terça-feira</p>
+                            </div>
+                            <span class="text-sm font-semibold text-gray-500">177,5 L</span>
+                        </div>
+
+                        <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                            <div class="w-12 h-12 bg-[#00A0B0] rounded-full flex items-center justify-center text-white font-bold">
+                                71L
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-semibold text-gray-800">São José/Caxito/Pedreiras - Jorge</h4>
+                                <p class="text-sm text-gray-600">Novembro - Sem data específica</p>
+                            </div>
+                            <span class="text-sm font-semibold text-gray-500">71,0 L</span>
+                        </div>
+
+                        <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                            <div class="w-12 h-12 bg-[#00A0B0] rounded-full flex items-center justify-center text-white font-bold">
+                                65L
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-semibold text-gray-800">Ponta Negra/Jaconé</h4>
+                                <p class="text-sm text-gray-600">Novembro - Sem data específica</p>
+                            </div>
+                            <span class="text-sm font-semibold text-gray-500">65,0 L</span>
+                        </div>
+                    </div>
+
+                    <button class="mt-6 w-full py-3 border-2 border-gray-300 rounded-lg text-gray-700 font-semibold hover:bg-gray-50 transition-colors">
+                        Ver Todas as Coletas
+                    </button>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Verifica se está logado e se a sessão é válida
+        function checkAuth() {
+            const isAdmin = localStorage.getItem('isAdmin');
+            const sessionToken = localStorage.getItem('sessionToken');
+            const loginTime = localStorage.getItem('loginTime');
+            
+            // Verifica se está logado
+            if (isAdmin !== 'true' || !sessionToken) {
+                window.location.href = 'login.html';
+                return false;
+            }
+            
+            // Verifica se a sessão expirou (24 horas)
+            const currentTime = Date.now();
+            const sessionDuration = 24 * 60 * 60 * 1000; // 24 horas em milissegundos
+            
+            if (loginTime && (currentTime - parseInt(loginTime)) > sessionDuration) {
+                alert('Sua sessão expirou. Faça login novamente.');
+                logout();
+                return false;
+            }
+            
+            return true;
+        }
+
+        // Executa verificação ao carregar
+        if (!checkAuth()) {
+            throw new Error('Não autenticado');
+        }
+
+        // Mostra nome do usuário
+        const adminUser = localStorage.getItem('adminUser');
+        if (adminUser) {
+            document.getElementById('adminName').textContent = adminUser.charAt(0).toUpperCase() + adminUser.slice(1);
+        }
+
+        // Função de logout
+        function logout() {
+            if (confirm('Deseja realmente sair?')) {
+                localStorage.removeItem('isAdmin');
+                localStorage.removeItem('adminUser');
+                localStorage.removeItem('sessionToken');
+                localStorage.removeItem('loginTime');
+                window.location.href = 'login.html?logout=true';
+            }
+        }
+
+        // Navegação da sidebar
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                if (this.getAttribute('href')?.startsWith('#')) {
+                    e.preventDefault();
+                    document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
