@@ -235,58 +235,130 @@
             border-left-width: 8px;
         }
         
-        /* Month Buttons - Subtle and Elegant */
-        .month-selector {
+        /* Month Buttons - Clean and Compact */
+        .year-month-selector {
+            margin-bottom: 2.5rem;
+            position: sticky;
+            top: -200px;
+            z-index: 100;
+            transition: top 0.3s ease;
+        }
+        
+        .year-month-selector.show {
+            top: 100px;
+        }
+        
+        /* Container único compacto */
+        .year-tabs {
             display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            background: white;
+            padding: 0.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            max-width: fit-content;
+            margin: 0 auto;
+        }
+        
+        .year-tab {
+            padding: 0.5rem 1.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border: none;
+            background: transparent;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-radius: 6px;
+        }
+        
+        .year-tab:hover {
+            color: #64748b;
+            background: #f8fafc;
+        }
+        
+        .year-tab-active {
+            background: linear-gradient(135deg, #00A0B0 0%, #007b8a 100%);
+            color: white;
+            box-shadow: 0 2px 6px rgba(0, 160, 176, 0.25);
+        }
+        
+        /* Container de meses - integrado */
+        .month-selector {
+            display: none;
             gap: 0.5rem;
             justify-content: center;
             align-items: center;
-            margin-bottom: 3rem;
-            padding: 0.5rem;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-            width: fit-content;
-            margin-left: auto;
-            margin-right: auto;
-            position: sticky;
-            top: 90px;
-            z-index: 100;
+            padding: 0 0.5rem 0.5rem;
+            background: transparent;
+            flex-wrap: wrap;
+            margin: 0.5rem auto 0;
+        }
+        
+        .month-selector.active {
+            display: flex;
         }
         
         .month-btn {
-            padding: 0.625rem 1.5rem;
+            padding: 0.5rem 1.25rem;
             font-size: 0.875rem;
             font-weight: 500;
-            border-radius: 8px;
-            border: none;
-            background: transparent;
-            color: #6b7280;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+            background: white;
+            color: #64748b;
             cursor: pointer;
             transition: all 0.2s ease;
-            position: relative;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
         }
         
         .month-btn:hover {
-            background: #f3f4f6;
-            color: #374151;
+            background: #f8fafc;
+            color: #334155;
+            border-color: #cbd5e1;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
         }
         
         .month-btn-active {
-            background: #00A0B0;
+            background: linear-gradient(135deg, #00A0B0 0%, #007b8a 100%);
             color: white;
             font-weight: 600;
-            box-shadow: 0 2px 8px rgba(0, 160, 176, 0.3);
+            border-color: transparent;
+            box-shadow: 0 2px 6px rgba(0, 160, 176, 0.3);
         }
         
         .month-btn-active:hover {
-            background: #007b8a;
+            background: linear-gradient(135deg, #008a9a 0%, #006a78 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0, 160, 176, 0.35);
         }
         
         @media (min-width: 640px) {
             .month-btn {
                 font-size: 0.9375rem;
                 padding: 0.75rem 1.75rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .year-month-selector.show {
+                top: 90px;
+            }
+            
+            .year-tabs {
+                padding: 0.4rem;
+            }
+            
+            .year-tab {
+                padding: 0.45rem 1.25rem;
+                font-size: 0.8rem;
+            }
+            
+            .month-btn {
+                padding: 0.45rem 1rem;
+                font-size: 0.8rem;
             }
         }
         
@@ -314,6 +386,31 @@
         .kpi-card:hover {
             transform: translateY(-8px) scale(1.03);
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Destaque especial para o cartão de Manifesto */
+        #kpi-card-balanco {
+            background: linear-gradient(135deg, #ffffff 0%, #f0f9fa 100%);
+            box-shadow: 0 4px 6px rgba(0, 160, 176, 0.15), 0 0 20px rgba(0, 160, 176, 0.08);
+        }
+        
+        #kpi-card-balanco:hover {
+            box-shadow: 0 20px 40px rgba(0, 160, 176, 0.25), 0 0 30px rgba(0, 160, 176, 0.15);
+            transform: translateY(-10px) scale(1.05);
+        }
+        
+        /* Animação sutil do badge */
+        @keyframes pulse-glow {
+            0%, 100% {
+                box-shadow: 0 0 10px rgba(0, 160, 176, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(0, 160, 176, 0.6);
+            }
+        }
+        
+        #kpi-card-balanco .absolute {
+            animation: pulse-glow 3s ease-in-out infinite;
         }
         
         /* Smooth Scroll */
@@ -543,19 +640,33 @@
             </div>
         </header>
 
-        <div class="month-selector">
-            <button id="btn-dezembro" class="month-btn">Dezembro 2025</button>
-            <button id="btn-novembro" class="month-btn">Novembro 2025</button>
-            <button id="btn-outubro" class="month-btn">Outubro 2025</button>
-            <button id="btn-setembro" class="month-btn">Setembro 2025</button>
-            <button id="btn-agosto" class="month-btn">Agosto 2025</button>
-            <button id="btn-julho" class="month-btn">Julho 2025</button>
-            <button id="btn-junho" class="month-btn">Junho 2025</button>
-            <button id="btn-maio" class="month-btn">Maio 2025</button>
-            <button id="btn-abril" class="month-btn">Abril 2025</button>
-            <button id="btn-marco" class="month-btn">Março 2025</button>
-            <button id="btn-fevereiro" class="month-btn">Fevereiro 2025</button>
-            <button id="btn-janeiro" class="month-btn">Janeiro 2025</button>
+        <div class="year-month-selector">
+            <!-- Tabs de Ano -->
+            <div class="year-tabs">
+                <button id="tab-2026" class="year-tab year-tab-active">2026</button>
+                <button id="tab-2025" class="year-tab">2025</button>
+            </div>
+            
+            <!-- Meses de 2026 -->
+            <div id="months-2026" class="month-selector active">
+                <button id="btn-janeiro-26" class="month-btn">Janeiro</button>
+            </div>
+            
+            <!-- Meses de 2025 -->
+            <div id="months-2025" class="month-selector">
+                <button id="btn-dezembro" class="month-btn">Dezembro</button>
+                <button id="btn-novembro" class="month-btn">Novembro</button>
+                <button id="btn-outubro" class="month-btn">Outubro</button>
+                <button id="btn-setembro" class="month-btn">Setembro</button>
+                <button id="btn-agosto" class="month-btn">Agosto</button>
+                <button id="btn-julho" class="month-btn">Julho</button>
+                <button id="btn-junho" class="month-btn">Junho</button>
+                <button id="btn-maio" class="month-btn">Maio</button>
+                <button id="btn-abril" class="month-btn">Abril</button>
+                <button id="btn-marco" class="month-btn">Março</button>
+                <button id="btn-fevereiro" class="month-btn">Fevereiro</button>
+                <button id="btn-janeiro" class="month-btn">Janeiro</button>
+            </div>
         </div>
 
         <!-- Botões de Exportação -->
@@ -681,6 +792,68 @@
     <script>
         // --- BASE DE DADOS CENTRAL ---
         const masterData = {
+            'janeiro_26': {
+                title: "Relatório de Resultados de Janeiro de 2026",
+                kpi: {
+                    total: 778.0, 
+                    residuos: 63.0, 
+                    balanco: 715.0, // Óleo Limpo (Real) - Manifesto: 675L
+                },
+                impact: {
+                    base: 715.0, 
+                    agua: 17.9, // 715 * 25000 / 1milhao
+                    co2: 1.6 
+                },
+                comparison: {
+                    value: "▲ 18.6%", 
+                    label: "Crescimento sobre Dezembro (603L)",
+                    color: "green"
+                },
+                charts: {
+                    weeklyGrowth: {
+                        // Grande concentração na última semana (Força Tarefa)
+                        labels: ['Semana 1', 'Semana 2 (10/01)', 'Semana 3', 'Semana 4 (26-30/01)'],
+                        data: [0.0, 45.0, 0.0, 733.0] 
+                    },
+                    district: {
+                        labels: ['1º Centro/Barra', '3º Inoã/São José', '2º Ponta Negra', '4º Itaipuaçu'],
+                        data: [432.0, 263.0, 83.0, 0.0] // Itaipuaçu zerado (Equipe dissolvida)
+                    },
+                    neighborhood: {
+                        // Top Bairros do Mês
+                        labels: ['Guaratiba', 'Inoã', 'Ponta Negra', 'Santa Paula', 'Centro', 'Outros'],
+                        data: [166.5, 98.5, 83.0, 80.0, 65.0, 285.0] 
+                    }
+                },
+                tables: {
+                     weekly: [
+                        { title: "Semana 2: Coletas Iniciais", rows: [
+                            ['10/01', 'Inoã/Bosque Fundo', 45.0]
+                        ]},
+                        { title: "Semana 4: Força Tarefa de Fechamento", rows: [
+                            ['26/01', 'Ponta Negra (Julia)', 83.0],
+                            ['27/01', 'São José/Cajueiros (Luiz)', 39.5],
+                            ['29/01', 'Centro/Mumbuca (Lidhia)', 97.5],
+                            ['30/01', 'Guaratiba (Viviane)', 166.5],
+                            ['30/01', 'Inoã/Sta Paula (Eliane)', 178.5],
+                            ['30/01', 'Barra/Araçatiba/Boq.', 168.0]
+                        ]}
+                    ],
+                    neighborhoods: [
+                        ['Guaratiba', 166.5],
+                        ['Inoã (Centro/Riverside)', 98.5],
+                        ['Ponta Negra', 83.0],
+                        ['Santa Paula', 80.0],
+                        ['Barra/Boqueirão', 124.0],
+                        ['Centro', 65.0],
+                        ['Bosque Fundo', 45.0],
+                        ['Araçatiba', 44.0],
+                        ['São José do Imbassaí', 39.5],
+                        ['Mumbuca', 32.5],
+                        ['Itaipuaçu', 0.0] // Observação sobre equipe dissolvida
+                    ]
+                }
+            },
             'dezembro': {
                 title: "Relatório de Resultados de Dezembro de 2025",
                 kpi: {
@@ -1275,7 +1448,7 @@
 
         // --- VARIÁVEIS GLOBAIS ---
         let weeklyGrowthChart, districtChart, neighborhoodChart;
-        let currentMonth = 'novembro';
+        let currentMonth = 'janeiro_26';
 
         const defaultTooltipOptions = {
             plugins: {
@@ -1318,6 +1491,7 @@
             const data = masterData[month];
 
             // Atualiza botões
+            document.getElementById('btn-janeiro-26').className = (month === 'janeiro_26') ? 'month-btn month-btn-active' : 'month-btn';
             document.getElementById('btn-dezembro').className = (month === 'dezembro') ? 'month-btn month-btn-active' : 'month-btn';
             document.getElementById('btn-novembro').className = (month === 'novembro') ? 'month-btn month-btn-active' : 'month-btn';
             document.getElementById('btn-outubro').className = (month === 'outubro') ? 'month-btn month-btn-active' : 'month-btn';
@@ -1348,6 +1522,25 @@
                 kpiCardBalanco.style.display = 'block';
                 kpiGrid.classList.remove('md:grid-cols-1');
                 kpiGrid.classList.add('md:grid-cols-3');
+                
+                // Badge de Manifesto apenas para Janeiro 2026
+                const existingBadge = kpiCardBalanco.querySelector('.manifesto-badge');
+                if (existingBadge) {
+                    existingBadge.remove();
+                }
+                
+                if (month === 'janeiro_26') {
+                    const badge = document.createElement('div');
+                    badge.className = 'manifesto-badge absolute top-3 right-3 bg-gradient-to-r from-[#00A0B0] to-[#007b8a] text-white text-xs px-3 py-1.5 rounded-full font-bold shadow-md';
+                    badge.style.animation = 'pulse-glow 3s ease-in-out infinite';
+                    badge.innerHTML = '📋 Manifesto: 675L';
+                    kpiCardBalanco.classList.add('relative', 'overflow-hidden');
+                    kpiCardBalanco.querySelector('h3').classList.add('pr-32');
+                    kpiCardBalanco.appendChild(badge);
+                } else {
+                    kpiCardBalanco.classList.remove('relative', 'overflow-hidden');
+                    kpiCardBalanco.querySelector('h3').classList.remove('pr-32');
+                }
             } else {
                 kpiCardResiduos.style.display = 'none';
                 kpiCardBalanco.style.display = 'none';
@@ -1356,7 +1549,22 @@
             }
 
             // Impacto
-            document.getElementById('impact-title').textContent = `Nosso Impacto Ambiental em ${month.charAt(0).toUpperCase() + month.slice(1)}`;
+            const monthNames = {
+                'janeiro_26': 'Janeiro de 2026',
+                'dezembro': 'Dezembro de 2025',
+                'novembro': 'Novembro de 2025',
+                'outubro': 'Outubro de 2025',
+                'setembro': 'Setembro de 2025',
+                'agosto': 'Agosto de 2025',
+                'julho': 'Julho de 2025',
+                'junho': 'Junho de 2025',
+                'maio': 'Maio de 2025',
+                'abril': 'Abril de 2025',
+                'marco': 'Março de 2025',
+                'fevereiro': 'Fevereiro de 2025',
+                'janeiro': 'Janeiro de 2025'
+            };
+            document.getElementById('impact-title').textContent = `Nosso Impacto Ambiental em ${monthNames[month] || month}`;
             document.getElementById('impact-agua').textContent = data.impact.agua.toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + " Milhões";
             document.getElementById('impact-co2').textContent = data.impact.co2.toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + " Toneladas";
 
@@ -1453,7 +1661,32 @@
                 options: { ...defaultTooltipOptions, responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, title: { display: true, text: 'Litros' } } }, plugins: { ...defaultTooltipOptions.plugins, legend: { display: false } } }
             });
 
+            // --- CONTROLE DE TABS DE ANO ---
+            const tab2026 = document.getElementById('tab-2026');
+            const tab2025 = document.getElementById('tab-2025');
+            const months2026 = document.getElementById('months-2026');
+            const months2025 = document.getElementById('months-2025');
+            
+            tab2026.addEventListener('click', () => {
+                tab2026.classList.add('year-tab-active');
+                tab2025.classList.remove('year-tab-active');
+                months2026.classList.add('active');
+                months2025.classList.remove('active');
+            });
+            
+            tab2025.addEventListener('click', () => {
+                tab2025.classList.add('year-tab-active');
+                tab2026.classList.remove('year-tab-active');
+                months2025.classList.add('active');
+                months2026.classList.remove('active');
+            });
+
             // Event Listeners dos Botões de Mês
+            document.getElementById('btn-janeiro-26').addEventListener('click', () => {
+                renderData('janeiro_26');
+                localStorage.setItem('selectedMonth', 'janeiro_26');
+            });
+
             document.getElementById('btn-dezembro').addEventListener('click', () => {
                 renderData('dezembro');
                 localStorage.setItem('selectedMonth', 'dezembro');
@@ -1546,7 +1779,7 @@
             // Verifica se há um parâmetro ?month= na URL
             const urlParams = new URLSearchParams(window.location.search);
             const monthFromUrl = urlParams.get('month');
-            const initialMonth = monthFromUrl || localStorage.getItem('selectedMonth') || 'dezembro';
+            const initialMonth = monthFromUrl || localStorage.getItem('selectedMonth') || 'janeiro_26';
             
             // Se veio de URL, salva no localStorage
             if (monthFromUrl) {
@@ -1554,6 +1787,24 @@
             }
             
             renderData(initialMonth);
+
+            // --- SCROLL BEHAVIOR: Mostra meses apenas ao rolar para cima ---
+            let lastScrollTop = 0;
+            const yearMonthSelector = document.querySelector('.year-month-selector');
+            
+            window.addEventListener('scroll', () => {
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                
+                if (scrollTop < lastScrollTop && scrollTop > 150) {
+                    // Rolando para cima e já passou do header
+                    yearMonthSelector.classList.add('show');
+                } else if (scrollTop > lastScrollTop || scrollTop <= 150) {
+                    // Rolando para baixo ou no topo
+                    yearMonthSelector.classList.remove('show');
+                }
+                
+                lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+            });
 
             // --- MODAL DE BOAS-VINDAS ---
             const welcomeModal = document.getElementById('welcomeModal');
