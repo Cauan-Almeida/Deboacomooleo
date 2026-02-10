@@ -797,12 +797,12 @@
                 kpi: {
                     total: 778.0, 
                     residuos: 63.0, 
-                    balanco: 715.0, // Óleo Limpo (Real) - Manifesto: 675L
+                    balanco: 715.0, // Óleo Limpo (Real: 715L) - Manifesto: 0,675T
                 },
                 impact: {
                     base: 715.0, 
                     agua: 17.9, // 715 * 25000 / 1milhao
-                    co2: 1.6 
+                    co2: 1.5 
                 },
                 comparison: {
                     value: "▲ 18.6%", 
@@ -1533,7 +1533,7 @@
                     const badge = document.createElement('div');
                     badge.className = 'manifesto-badge absolute top-3 right-3 bg-gradient-to-r from-[#00A0B0] to-[#007b8a] text-white text-xs px-3 py-1.5 rounded-full font-bold shadow-md';
                     badge.style.animation = 'pulse-glow 3s ease-in-out infinite';
-                    badge.innerHTML = '📋 Manifesto: 675L';
+                    badge.innerHTML = '📋 Manifesto: 0,675T';
                     kpiCardBalanco.classList.add('relative', 'overflow-hidden');
                     kpiCardBalanco.querySelector('h3').classList.add('pr-32');
                     kpiCardBalanco.appendChild(badge);
