@@ -423,90 +423,6 @@
             scroll-margin-top: 100px;
         }
 
-        /* Modal Styles */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(8px);
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-
-        .modal-overlay.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        .modal-content {
-            background: white;
-            border-radius: 24px;
-            padding: 3rem;
-            max-width: 600px;
-            width: 90%;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
-            transform: scale(0.9);
-            transition: transform 0.3s ease;
-            text-align: center;
-        }
-
-        .modal-overlay.active .modal-content {
-            transform: scale(1);
-        }
-
-        .modal-icon {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 1.5rem;
-            background: linear-gradient(135deg, #00A0B0 0%, #007b8a 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 2.5rem;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #00A0B0 0%, #007b8a 100%);
-            color: white;
-            padding: 1rem 2rem;
-            border-radius: 12px;
-            font-weight: 600;
-            transition: all 0.3s;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0, 160, 176, 0.3);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 160, 176, 0.4);
-        }
-
-        .btn-secondary {
-            background: white;
-            color: #00A0B0;
-            padding: 1rem 2rem;
-            border-radius: 12px;
-            font-weight: 600;
-            transition: all 0.3s;
-            border: 2px solid #00A0B0;
-            cursor: pointer;
-        }
-
-        .btn-secondary:hover {
-            background: #f0f9ff;
-        }
-
         /* Export Buttons */
         .export-buttons {
             display: flex;
@@ -544,28 +460,6 @@
 </head>
 <body class="bg-gray-50 text-gray-800">
 
-    <!-- Modal de Boas-vindas -->
-    <div class="modal-overlay" id="welcomeModal">
-        <div class="modal-content">
-            <div class="modal-icon">
-                📊
-            </div>
-            <h2 class="text-3xl font-bold text-gray-800 mb-4">Bem-vindo ao Sistema De Boa com o Óleo!</h2>
-            <p class="text-lg text-gray-600 mb-6">
-                Deseja visualizar o <strong>Relatório Anual Completo de 2025</strong> com estatísticas consolidadas, gráficos comparativos e insights do ano todo?
-            </p>
-            <div class="flex gap-4 justify-center flex-wrap">
-                <button class="btn-primary" id="btnViewAnnualReport">
-                    Ver Relatório Anual 2025
-                </button>
-                <button class="btn-secondary" id="btnContinueMonthly">
-                    Continuar com Relatórios Mensais
-                </button>
-            </div>
-            <p class="text-sm text-gray-500 mt-4">Você pode acessar o relatório anual a qualquer momento pelo menu de navegação.</p>
-        </div>
-    </div>
-
     <!-- Navigation Header -->
     <nav class="nav-header">
         <div class="nav-container">
@@ -574,6 +468,11 @@
                 <h1>De Boa com o Óleo</h1>
             </div>
             
+            <a href="relatorio-anual.html" style="color: white; font-size: 0.8rem; font-weight: 600; opacity: 0.9; text-decoration: none; white-space: nowrap; display: none;" class="sm:block"
+               onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.9'">
+                📊 Rel. Anual 2025
+            </a>
+
             <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
@@ -613,7 +512,7 @@
                         </svg>
                         Detalhes
                     </a>
-                    <a href="relatorio-anual.html" class="nav-link" style="background: linear-gradient(135deg, #00A0B0 0%, #007b8a 100%); color: white; border-radius: 8px; margin-top: 1rem;">
+                    <a href="relatorio-anual.html" class="nav-link">
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                         </svg>
@@ -649,6 +548,7 @@
             
             <!-- Meses de 2026 -->
             <div id="months-2026" class="month-selector active">
+                <button id="btn-fevereiro-26" class="month-btn">Fevereiro</button>
                 <button id="btn-janeiro-26" class="month-btn">Janeiro</button>
             </div>
             
@@ -676,12 +576,6 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                 </svg>
                 Exportar Mês em PDF
-            </button>
-            <button id="btnViewAnnual" class="btn-export" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                </svg>
-                Ver Relatório Anual 2025
             </button>
         </div>
 
@@ -792,6 +686,71 @@
     <script>
         // --- BASE DE DADOS CENTRAL ---
         const masterData = {
+            'fevereiro_26': {
+                title: "Relatório de Resultados de Fevereiro de 2026",
+                kpi: {
+                    total: 800.0,    // Valor oficial do caderno
+                    residuos: 90.0,  // Valor oficial do caderno
+                    balanco: 710.0,  // Óleo Limpo (Manifesto)
+                },
+                impact: {
+                    base: 710.0, 
+                    agua: 17.7, // 710 * 25000 / 1milhao
+                    co2: 1.5 
+                },
+                comparison: {
+                    value: "▲ 2.8%", 
+                    label: "Crescimento sobre Janeiro (778L)",
+                    color: "green"
+                },
+                charts: {
+                    weeklyGrowth: {
+                        // Carnaval foi na semana 3 (dia 17). Coletas datadas de 23/02 a 03/03.
+                        labels: ['Semana 1', 'Semana 2', 'Semana 3 (Carnaval)', 'Semana 4 (Pós-Feriado)'],
+                        data: [0.0, 0.0, 0.0, 800.0] 
+                    },
+                    district: {
+                        // Proporção ajustada para fechar com os 800L oficiais
+                        labels: ['1º Centro/Barra', '3º Inoã/São José', '2º Ponta Negra', '4º Itaipuaçu'],
+                        data: [442.0, 221.0, 133.0, 4.0] 
+                    },
+                    neighborhood: {
+                        // Top Bairros do Mês (Valores proporcionais aos 800L)
+                        labels: ['São José', 'Ponta Negra*', 'Centro', 'Jacaroá', 'Santa Paula', 'Outros'],
+                        data: [156.0, 107.0, 91.0, 64.0, 58.0, 324.0] 
+                    }
+                },
+                tables: {
+                     weekly: [
+                        { title: "Força Tarefa Pós-Carnaval (Fichas 23/02 a 03/03)", rows: [
+                            ['23/02', 'Ponta Negra/Cordeirinho/Bambuí', 140.1],
+                            ['25/02', 'Inoã (Chácaras/SPAR/Bosque)', 140.0],
+                            ['26/02', 'São José/Cajueiros', 174.2],
+                            ['27/02', 'Jacaroá/Araçatiba', 125.8],
+                            ['02/03', 'Barra/Guaratiba', 99.8],
+                            ['03/03', 'Centro/Marquês/Amizade', 179.0]
+                        ]},
+                        { title: "Anexos e Operações Especiais", rows: [
+                            ['Fevereiro', 'Operação WhatsApp (Inoã/SJ/Itapeba)', 55.5],
+                            ['Janeiro', 'Ficha retida de Inoã processada agora', 52.5]
+                        ]}
+                    ],
+                    neighborhoods: [
+                        ['São José do Imbassaí', 204.2], // Inclui WhatsApp
+                        ['Ponta Negra e adjacências', 140.1],
+                        ['Centro', 119.0],
+                        ['Jacaroá', 84.5],
+                        ['Santa Paula', 76.0],
+                        ['Chácaras de Inoã', 65.5],
+                        ['Barra de Maricá', 65.3],
+                        ['Marquês/Amizade', 60.0],
+                        ['Araçatiba', 41.3],
+                        ['Guaratiba', 34.5],
+                        ['Itapeba (WhatsApp)', 5.0],
+                        ['Itaipuaçu (JAC)', 5.5]
+                    ]
+                }
+            },
             'janeiro_26': {
                 title: "Relatório de Resultados de Janeiro de 2026",
                 kpi: {
@@ -1448,7 +1407,7 @@
 
         // --- VARIÁVEIS GLOBAIS ---
         let weeklyGrowthChart, districtChart, neighborhoodChart;
-        let currentMonth = 'janeiro_26';
+        let currentMonth = 'fevereiro_26';
 
         const defaultTooltipOptions = {
             plugins: {
@@ -1491,6 +1450,7 @@
             const data = masterData[month];
 
             // Atualiza botões
+            document.getElementById('btn-fevereiro-26').className = (month === 'fevereiro_26') ? 'month-btn month-btn-active' : 'month-btn';
             document.getElementById('btn-janeiro-26').className = (month === 'janeiro_26') ? 'month-btn month-btn-active' : 'month-btn';
             document.getElementById('btn-dezembro').className = (month === 'dezembro') ? 'month-btn month-btn-active' : 'month-btn';
             document.getElementById('btn-novembro').className = (month === 'novembro') ? 'month-btn month-btn-active' : 'month-btn';
@@ -1529,11 +1489,16 @@
                     existingBadge.remove();
                 }
                 
-                if (month === 'janeiro_26') {
+                const manifestoMap = {
+                    'janeiro_26': '0,675T',
+                    'fevereiro_26': '0,639T'
+                };
+                
+                if (manifestoMap[month]) {
                     const badge = document.createElement('div');
                     badge.className = 'manifesto-badge absolute top-3 right-3 bg-gradient-to-r from-[#00A0B0] to-[#007b8a] text-white text-xs px-3 py-1.5 rounded-full font-bold shadow-md';
                     badge.style.animation = 'pulse-glow 3s ease-in-out infinite';
-                    badge.innerHTML = '📋 Manifesto: 0,675T';
+                    badge.innerHTML = `📋 Manifesto: ${manifestoMap[month]}`;
                     kpiCardBalanco.classList.add('relative', 'overflow-hidden');
                     kpiCardBalanco.querySelector('h3').classList.add('pr-32');
                     kpiCardBalanco.appendChild(badge);
@@ -1550,6 +1515,7 @@
 
             // Impacto
             const monthNames = {
+                'fevereiro_26': 'Fevereiro de 2026',
                 'janeiro_26': 'Janeiro de 2026',
                 'dezembro': 'Dezembro de 2025',
                 'novembro': 'Novembro de 2025',
@@ -1682,6 +1648,11 @@
             });
 
             // Event Listeners dos Botões de Mês
+            document.getElementById('btn-fevereiro-26').addEventListener('click', () => {
+                renderData('fevereiro_26');
+                localStorage.setItem('selectedMonth', 'fevereiro_26');
+            });
+
             document.getElementById('btn-janeiro-26').addEventListener('click', () => {
                 renderData('janeiro_26');
                 localStorage.setItem('selectedMonth', 'janeiro_26');
@@ -1779,7 +1750,7 @@
             // Verifica se há um parâmetro ?month= na URL
             const urlParams = new URLSearchParams(window.location.search);
             const monthFromUrl = urlParams.get('month');
-            const initialMonth = monthFromUrl || localStorage.getItem('selectedMonth') || 'janeiro_26';
+            const initialMonth = monthFromUrl || localStorage.getItem('selectedMonth') || 'fevereiro_26';
             
             // Se veio de URL, salva no localStorage
             if (monthFromUrl) {
@@ -1806,35 +1777,7 @@
                 lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
             });
 
-            // --- MODAL DE BOAS-VINDAS ---
-            const welcomeModal = document.getElementById('welcomeModal');
-            const btnViewAnnualReport = document.getElementById('btnViewAnnualReport');
-            const btnContinueMonthly = document.getElementById('btnContinueMonthly');
-            const btnViewAnnual = document.getElementById('btnViewAnnual');
 
-            // Verifica se o usuário já viu o modal nesta sessão
-            const hasSeenModal = sessionStorage.getItem('hasSeenWelcomeModal');
-
-            // Não mostra o modal se veio de um link direto para um mês
-            if (!hasSeenModal && !monthFromUrl) {
-                setTimeout(() => {
-                    welcomeModal.classList.add('active');
-                }, 500);
-            }
-
-            btnViewAnnualReport.addEventListener('click', () => {
-                sessionStorage.setItem('hasSeenWelcomeModal', 'true');
-                window.location.href = 'relatorio-anual.html';
-            });
-
-            btnContinueMonthly.addEventListener('click', () => {
-                sessionStorage.setItem('hasSeenWelcomeModal', 'true');
-                welcomeModal.classList.remove('active');
-            });
-
-            btnViewAnnual.addEventListener('click', () => {
-                window.location.href = 'relatorio-anual.html';
-            });
 
             // --- EXPORTAÇÃO DE PDF MENSAL ---
             const btnExportMonthPDF = document.getElementById('btnExportMonthPDF');
