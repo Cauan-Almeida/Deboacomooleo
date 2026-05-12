@@ -559,6 +559,7 @@
             
             <!-- Meses de 2026 -->
             <div id="months-2026" class="month-selector active">
+                <button id="btn-abril-26" class="month-btn">Abril</button>
                 <button id="btn-marco-26" class="month-btn">Março</button>
                 <button id="btn-fevereiro-26" class="month-btn">Fevereiro</button>
                 <button id="btn-janeiro-26" class="month-btn">Janeiro</button>
@@ -1159,6 +1160,70 @@
                 },
                 tables: { weekly: [{ title: "Coletas FAS", rows: [['12/03', 'Coleta Geral', 180.0], ['21/03', 'Coleta Geral', 199.8]]}], neighborhoods: [] }
             },
+            'abril_26': {
+                title: "Relatório de Resultados de Abril de 2026",
+                kpi: {
+                    total: 1613.0,
+                    residuos: 106.0,
+                    balanco: 1507.0,
+                },
+                impact: {
+                    base: 1507.0, 
+                    agua: 37.7,
+                    co2: 3.2
+                },
+                comparison: { value: "▲ 58.6%", label: "Crescimento sobre Março (1.017L)", color: "green" },
+                charts: {
+                    weeklyGrowth: {
+                        labels: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4 (Fechamento/Mai)'],
+                        data: [140.0, 188.0, 347.0, 938.0]
+                    },
+                    district: {
+                        labels: ['1º Sede', '3º Inoã', '4º Itaipuaçu', '2º P. Negra'],
+                        data: [703.0, 469.0, 356.0, 85.0]
+                    },
+                    neighborhood: {
+                        labels: ['Itaipuaçu', 'Inoã', 'Santa Paula', 'São José', 'Barra', 'Outros'],
+                        data: [356.0, 235.0, 207.0, 156.0, 84.0, 575.0]
+                    }
+                },
+                tables: {
+                    weekly: [
+                        { title: "Destaques das Rotas de Fechamento (Proporcional)", rows: [
+                            ['05/05', 'Itaipuaçu (Ruas Diversas)', 211.0],
+                            ['06/05', 'São José do Imbassaí', 156.0],
+                            ['07/05', 'Santa Paula', 207.0],
+                            ['07/05', 'Inoã e São José (Cond. Bosque)', 163.0],
+                            ['08/05', 'Barra e Adjacências', 334.0]
+                        ]},
+                        { title: "Operações de Telefone", rows: [
+                            ['Abril', 'Retorno Foco - Itaipuaçu', 72.7],
+                            ['Abril', 'Regiões Diversas (Fim de Março)', 33.5]
+                        ]} 
+                    ],
+                    neighborhoods: [
+                        ['Itaipuaçu (Ruas + Telefone + Cajueiros)', 356.0],
+                        ['Inoã (Centro)', 235.0],
+                        ['Santa Paula', 207.0],
+                        ['São José do Imbassaí (inclui Cond. Bosque)', 156.0],
+                        ['Barra de Maricá', 84.0],
+                        ['Guaratiba', 78.0],
+                        ['Centro', 110.0],
+                        ['Condomínios (Royal/Green Park)', 73.0],
+                        ['Pedreira', 52.0],
+                        ['Ponta Negra', 43.0],
+                        ['Flamengo', 42.0],
+                        ['Mumbuca', 18.0],
+                        ['Ubatiba', 15.0],
+                        ['Jacaroá', 25.0],
+                        ['Outros Bairros Diversos', 119.0]
+                    ] 
+                },
+                occurrences: {
+                    whatsapp: "Mês atípico com 4 dias não efetivos e 4 bloqueios de 24h no WhatsApp. Telefone compensou gerando excelente retorno.",
+                    itaipuacu: "Itaipuaçu consolida-se como potência, e a operação geral bateu o recorde absoluto de 1,5 Toneladas de óleo limpo."
+                }
+            },
             'marco_26': {
                 title: "Relatório de Resultados de Março de 2026",
                 kpi: {
@@ -1489,7 +1554,7 @@
 
         // --- VARIÁVEIS GLOBAIS ---
         let weeklyGrowthChart, districtChart, neighborhoodChart;
-        let currentMonth = 'marco_26';
+        let currentMonth = 'abril_26';
 
         const defaultTooltipOptions = {
             plugins: {
@@ -1532,6 +1597,7 @@
             const data = masterData[month];
 
             // Atualiza botões
+            document.getElementById('btn-abril-26').className = (month === 'abril_26') ? 'month-btn month-btn-active' : 'month-btn';
             document.getElementById('btn-marco-26').className = (month === 'marco_26') ? 'month-btn month-btn-active' : 'month-btn';
             document.getElementById('btn-fevereiro-26').className = (month === 'fevereiro_26') ? 'month-btn month-btn-active' : 'month-btn';
             document.getElementById('btn-janeiro-26').className = (month === 'janeiro_26') ? 'month-btn month-btn-active' : 'month-btn';
@@ -1573,6 +1639,7 @@
                 }
                 
                 const manifestoMap = {
+                    'abril_26': '1,356T',
                     'marco_26': '0,792T',
                     'janeiro_26': '0,675T',
                     'fevereiro_26': '0,639T'
@@ -1599,6 +1666,7 @@
 
             // Impacto
             const monthNames = {
+                'abril_26': 'Abril de 2026',
                 'fevereiro_26': 'Fevereiro de 2026',
                 'janeiro_26': 'Janeiro de 2026',
                 'dezembro': 'Dezembro de 2025',
@@ -1739,6 +1807,11 @@
             });
 
             // Event Listeners dos Botões de Mês
+            document.getElementById('btn-abril-26').addEventListener('click', () => {
+                renderData('abril_26');
+                localStorage.setItem('selectedMonth', 'abril_26');
+            });
+
             document.getElementById('btn-marco-26').addEventListener('click', () => {
                 renderData('marco_26');
                 localStorage.setItem('selectedMonth', 'marco_26');
@@ -1842,11 +1915,11 @@
                 });
             });
 
-            // Renderiza o estado inicial (usa o último mês selecionado ou Março 2026 como padrão)
+            // Renderiza o estado inicial (usa o último mês selecionado ou Abril 2026 como padrão)
             // Verifica se há um parâmetro ?month= na URL
             const urlParams = new URLSearchParams(window.location.search);
             const monthFromUrl = urlParams.get('month');
-            const initialMonth = monthFromUrl || localStorage.getItem('selectedMonth') || 'marco_26';
+            const initialMonth = monthFromUrl || localStorage.getItem('selectedMonth') || 'abril_26';
             
             // Se veio de URL, salva no localStorage
             if (monthFromUrl) {
