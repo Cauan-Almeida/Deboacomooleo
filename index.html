@@ -1163,38 +1163,42 @@
             'abril_26': {
                 title: "Relatório de Resultados de Abril de 2026",
                 kpi: {
-                    total: 1613.0,
-                    residuos: 106.0,
-                    balanco: 1507.0,
+                    total: 1613.0,   // Valor bruto oficial da balança (com sujidade)
+                    residuos: 106.0, // Quebra/Água (Calculado)
+                    balanco: 1507.0, // Óleo Limpo Oficial (1,35630 Toneladas do Manifesto)
                 },
                 impact: {
                     base: 1507.0, 
-                    agua: 37.7,
-                    co2: 3.2
+                    agua: 37.7, // 1507 * 25000 / 1milhao
+                    co2: 3.2    // Proporcional aos 1507L limpos
                 },
-                comparison: { value: "▲ 58.6%", label: "Crescimento sobre Março (1.017L)", color: "green" },
+                comparison: {
+                    value: "▲ 58.6%", 
+                    label: "Crescimento sobre Março (1.017L)",
+                    color: "green"
+                },
                 charts: {
                     weeklyGrowth: {
-                        labels: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4 (Fechamento/Mai)'],
-                        data: [140.0, 188.0, 347.0, 938.0]
+                        labels: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4 (Fecho/Mai)'],
+                        data: [140.0, 188.0, 347.0, 938.0] // Mutirões concentrados no final do mês
                     },
                     district: {
                         labels: ['1º Sede', '3º Inoã', '4º Itaipuaçu', '2º P. Negra'],
-                        data: [703.0, 469.0, 356.0, 85.0]
+                        data: [703.0, 469.0, 356.0, 85.0] // Soma exata: 1613.0 L
                     },
                     neighborhood: {
-                        labels: ['Itaipuaçu', 'Inoã', 'Santa Paula', 'São José', 'Barra', 'Outros'],
-                        data: [356.0, 235.0, 207.0, 156.0, 84.0, 575.0]
+                        labels: ['Itaipuaçu', 'Inoã', 'Santa Paula', 'São José', 'Centro', 'Outros'],
+                        data: [318.0, 235.0, 207.0, 136.0, 120.0, 597.0] // Top 5 para o Gráfico
                     }
                 },
                 tables: {
-                    weekly: [
-                        { title: "Destaques das Rotas de Fechamento (Proporcional)", rows: [
+                     weekly: [
+                        { title: "Destaques das Rotas de Fecho (Proporcional)", rows: [
                             ['05/05', 'Itaipuaçu (Ruas Diversas)', 211.0],
-                            ['06/05', 'São José do Imbassaí', 156.0],
+                            ['06/05', 'Cajueiros / São José', 156.0],
                             ['07/05', 'Santa Paula', 207.0],
-                            ['07/05', 'Inoã e São José (Cond. Bosque)', 163.0],
-                            ['08/05', 'Barra e Adjacências', 334.0]
+                            ['07/05', 'Inoã (Cajueiro / Bosque)', 163.0],
+                            ['08/05', 'Barra e Adjacências (Centro)', 334.0]
                         ]},
                         { title: "Operações de Telefone", rows: [
                             ['Abril', 'Retorno Foco - Itaipuaçu', 72.7],
@@ -1202,22 +1206,27 @@
                         ]} 
                     ],
                     neighborhoods: [
-                        ['Itaipuaçu (Ruas + Telefone + Cajueiros)', 356.0],
-                        ['Inoã (Centro)', 235.0],
+                        ['Itaipuaçu (Recanto/Praia/Telefone)', 318.0],
+                        ['Inoã (Centro/Chácaras/Bosque)', 235.0],
                         ['Santa Paula', 207.0],
-                        ['São José do Imbassaí (inclui Cond. Bosque)', 156.0],
-                        ['Barra de Maricá', 84.0],
-                        ['Guaratiba', 78.0],
-                        ['Centro', 110.0],
-                        ['Condomínios (Royal/Green Park)', 73.0],
-                        ['Pedreira', 52.0],
-                        ['Ponta Negra', 43.0],
-                        ['Flamengo', 42.0],
-                        ['Mumbuca', 18.0],
-                        ['Ubatiba', 15.0],
-                        ['Jacaroá', 25.0],
-                        ['Outros Bairros Diversos', 119.0]
-                    ] 
+                        ['São José do Imbassaí', 136.0],
+                        ['Centro (Sede)', 120.0],
+                        ['Barra de Maricá (Centro)', 110.0],
+                        ['Guaratiba (Centro)', 90.0],
+                        ['Condomínios Green Park/Royal (Centro)', 73.0],
+                        ['Flamengo (Centro)', 42.0],
+                        ['Pedreiras (Centro)', 40.0],
+                        ['Cajueiros', 38.0],
+                        ['Mumbuca (Centro)', 32.0],
+                        ['Cordeirinho', 30.0],
+                        ['SPAR / Cassorotiba', 27.0],
+                        ['Jacaroá (Centro)', 25.0],
+                        ['Ponta Negra', 25.0],
+                        ['Manu Manuela', 20.0],
+                        ['Bambuí', 20.0],
+                        ['Marquês de Maricá (Centro)', 15.0],
+                        ['Jardim Interlagos', 10.0]
+                    ] // SOMA TOTAL EXATA: 1613.0 LITROS
                 },
                 occurrences: {
                     whatsapp: "Mês atípico com 4 dias não efetivos e 4 bloqueios de 24h no WhatsApp. Telefone compensou gerando excelente retorno.",
