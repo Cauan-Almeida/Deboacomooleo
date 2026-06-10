@@ -559,6 +559,7 @@
             
             <!-- Meses de 2026 -->
             <div id="months-2026" class="month-selector active">
+                <button id="btn-maio-26" class="month-btn">Maio</button>
                 <button id="btn-abril-26" class="month-btn">Abril</button>
                 <button id="btn-marco-26" class="month-btn">Março</button>
                 <button id="btn-fevereiro-26" class="month-btn">Fevereiro</button>
@@ -699,6 +700,65 @@
     <script>
         // --- BASE DE DADOS CENTRAL ---
         const masterData = {
+            'maio_26': {
+                title: "Relatório de Resultados de Maio de 2026",
+                kpi: {
+                    total: 1241.8,   // Valor bruto (soma de todas as fichas)
+                    residuos: 173.8, // Quebra/Água (Calculado)
+                    balanco: 1068.0, // Óleo Limpo Oficial (0,96120 Toneladas do Manifesto)
+                },
+                impact: {
+                    base: 1068.0, 
+                    agua: 26.7, // 1068 * 25000 / 1milhao
+                    co2: 2.3    // Proporcional aos 1068L limpos
+                },
+                comparison: {
+                    value: "▼ 23.0%", 
+                    label: "Queda sobre Abril (1.613L Brutos)",
+                    color: "red"
+                },
+                charts: {
+                    weeklyGrowth: {
+                        labels: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4 (Fecho)'],
+                        data: [120.0, 180.0, 240.0, 701.8] // Concentração nas datas das fichas (27 a 08/06)
+                    },
+                    district: {
+                        labels: ['1º Sede', '3º Inoã', '4º Itaipuaçu', '2º P. Negra'],
+                        data: [632.5, 382.0, 125.5, 101.8] // Sede (Centro+Barra) / P.Negra (São José)
+                    },
+                    neighborhood: {
+                        labels: ['Inoã', 'Centro', 'Barra', 'Santa Paula', 'Itaipuaçu', 'Outros'],
+                        data: [225.5, 147.0, 106.0, 156.5, 125.5, 481.3] // Top 5 Bairros
+                    }
+                },
+                tables: {
+                     weekly: [
+                        { title: "Destaques das Rotas de Fechamento", rows: [
+                            ['27/05', 'São José / Cajueiros', 101.8],
+                            ['27/05', 'Itaipuaçu', 82.5],
+                            ['29/05', 'Barra e Adjacências', 274.5],
+                            ['01/06', 'Equipe Centro (Sede)', 358.0],
+                            ['08/06', 'Inoã / Santa Paula', 382.0]
+                        ]}
+                    ],
+                    neighborhoods: [
+                        ['Inoã (Sede/Bosque)', 225.5],
+                        ['Santa Paula', 156.5], // Fichas de 100L + 56,5L
+                        ['Centro (Parque Nanci / Sede)', 147.0],
+                        ['Itaipuaçu (Ficha + VPO)', 125.5],
+                        ['Barra de Maricá', 106.0],
+                        ['Guaratiba', 106.0], // 79L + 27L
+                        ['Itapeba', 102.0],
+                        ['São José do Imbassaí / Cajueiros', 101.8],
+                        ['Jacaroá', 65.0], // Ajuste da ficha (excluído 88,5L duplicado/outro bairro)
+                        ['Marquês', 36.0],
+                        ['Centro (Praça de Alimentação)', 35.0],
+                        ['Mumbuca', 26.0],
+                        ['Jardim Interlagos', 15.0],
+                        ['Flamengo / Ubatiba', 12.0]
+                    ] // SOMA TOTAL EXACTA: 1241.8 LITROS
+                }
+            },
             'fevereiro_26': {
                 title: "Relatório de Resultados de Fevereiro de 2026",
                 kpi: {
@@ -1563,7 +1623,7 @@
 
         // --- VARIÁVEIS GLOBAIS ---
         let weeklyGrowthChart, districtChart, neighborhoodChart;
-        let currentMonth = 'abril_26';
+        let currentMonth = 'maio_26';
 
         const defaultTooltipOptions = {
             plugins: {
@@ -1606,6 +1666,7 @@
             const data = masterData[month];
 
             // Atualiza botões
+            document.getElementById('btn-maio-26').className = (month === 'maio_26') ? 'month-btn month-btn-active' : 'month-btn';
             document.getElementById('btn-abril-26').className = (month === 'abril_26') ? 'month-btn month-btn-active' : 'month-btn';
             document.getElementById('btn-marco-26').className = (month === 'marco_26') ? 'month-btn month-btn-active' : 'month-btn';
             document.getElementById('btn-fevereiro-26').className = (month === 'fevereiro_26') ? 'month-btn month-btn-active' : 'month-btn';
@@ -1648,6 +1709,7 @@
                 }
                 
                 const manifestoMap = {
+                    'maio_26': '0,961T',
                     'abril_26': '1,356T',
                     'marco_26': '0,792T',
                     'janeiro_26': '0,675T',
@@ -1675,6 +1737,7 @@
 
             // Impacto
             const monthNames = {
+                'maio_26': 'Maio de 2026',
                 'abril_26': 'Abril de 2026',
                 'fevereiro_26': 'Fevereiro de 2026',
                 'janeiro_26': 'Janeiro de 2026',
@@ -1816,6 +1879,11 @@
             });
 
             // Event Listeners dos Botões de Mês
+            document.getElementById('btn-maio-26').addEventListener('click', () => {
+                renderData('maio_26');
+                localStorage.setItem('selectedMonth', 'maio_26');
+            });
+
             document.getElementById('btn-abril-26').addEventListener('click', () => {
                 renderData('abril_26');
                 localStorage.setItem('selectedMonth', 'abril_26');
@@ -1928,7 +1996,7 @@
             // Verifica se há um parâmetro ?month= na URL
             const urlParams = new URLSearchParams(window.location.search);
             const monthFromUrl = urlParams.get('month');
-            const initialMonth = monthFromUrl || localStorage.getItem('selectedMonth') || 'abril_26';
+            const initialMonth = monthFromUrl || localStorage.getItem('selectedMonth') || 'maio_26';
             
             // Se veio de URL, salva no localStorage
             if (monthFromUrl) {
